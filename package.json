@@ -1,0 +1,49 @@
+{
+  "name": "astro-favicons",
+  "version": "0.9.28",
+  "type": "module",
+  "description": "A Multi-platform, All Browser Favicon generator for Astro Project.",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "keywords": [
+    "withastro",
+    "astro-component",
+    "astro-favicons",
+    "favicons",
+    "favicons generator",
+    "web application manifest",
+    "manifest.webmanifest",
+    "yandex-browser-manifest.json",
+    "browserconfig.xml",
+    "favicon.ico"
+  ],
+  "scripts": {
+    "build": "at-scripts create-pkg-name && at-scripts build && tsc -p tsconfig.build.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACP-CODE/astro-favicons.git"
+  },
+  "author": "Junlin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ACP-CODE/astro-favicons/issues"
+  },
+  "homepage": "https://github.com/ACP-CODE/astro-favicons#readme",
+  "devDependencies": {
+    "astro": "^3.1.3",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "favicons-lib": "^7.1.5"
+  }
+}
