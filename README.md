@@ -156,7 +156,7 @@ Future upgrades of the core may be spent more on the favicons-lib library
 
 ## Need Help or Feedback?
 
-Submit your issues or feedback on our [GitHub](https://github.com/ACP-CODE/astro-robots/issues) channel.
+Submit your issues or feedback on our [GitHub](https://github.com/ACP-CODE/astro-favicons/issues) channel.
 
 ## Changelog
 
