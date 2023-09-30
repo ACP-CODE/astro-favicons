@@ -3,7 +3,9 @@
 **Latest Updates! 🎉 See the [change log](./CHANGELOG.md) for details.**
 
 # astro-favicons
-A Multi-platform, All Browser Favicon generator for [Astro](https://astro.build/) Project.
+
+A Multi-platform (iOS13+、Android、Windows、macOS、chromeOS etc.),
+All Browser(Chrome、 Safari、Firefox、Yandex、IE、Edge ) Favicon generator for [Astro](https://astro.build/) Project.
 
 
 [Features](#features) · [Installation](#installation) · [Usage](#usage) · [Configuration](#configuration) · [Change Log](/CHANGELOG.md)
@@ -15,6 +17,7 @@ A Multi-platform, All Browser Favicon generator for [Astro](https://astro.build/
 - Generates and inserts standard-compliant favicon link tags.
 - Automatically creates favicon assets for different environments using one source file.
 - Simplify or optimize communication between teams to avoid missing files.
+- Change Favicon for Light and Dark Mode.
 
 
 ## Installation
@@ -77,22 +80,28 @@ export default defineConfig({
    Following HTML Code will **automatically insert** in the `head` section of all pages.
 
 ```html
-<!-- Astro Favicons v0.2.0 - https://github.com/ACP-CODE/astro-favicons -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
-<link rel="manifest" href="/manifest.webmanifest" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="theme-color" content="#fff" />
-<meta name="application-name" content="Your Application Name" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta ame="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="Application Name" />
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
-<meta name="msapplication-TileColor" content="#fff" />
-<meta name="msapplication-config" content="/browserconfig.xml" />
-<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json" />
+<!-- Astro Favicons v1.0.0 - https://github.com/ACP-CODE/astro-favicons -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fff">
+<meta name="application-name" content="Your Application Name">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Application Name">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff">
+<meta name="msapplication-TileColor" content="#fff">
+<meta name="msapplication-config" content="/browserconfig.xml">
+<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json">
 <!--  Astro Favicons -->
 ```
 
@@ -112,9 +121,14 @@ npm run build
 │   ├── apple-touch-icon.png
 │   ├── browserconfig.xml
 │   ├── favicon-16x16.png
+│   ├── favicon-16x16-dark.png
 │   ├── favicon-32x32.png
+│   ├── favicon-32x32-dark.png
 │   ├── favicon-48x48.png
+│   ├── favicon-48x48-dark.png
 │   ├── favicon.ico
+│   ├── favicon-dark.ico
+│   ├── favicon.svg
 │   ├── manifest.webmanifest
 │   ├── mstile-150x150.png
 │   ├── safari-pinned-tab.svg
@@ -125,7 +139,7 @@ npm run build
 └── package.json
 ```
 
-> The default output is a total of **13 files**, which will reach **61 files** in full configuration
+> The default output is a total of **18 files**, which will reach **66 files** in full configuration
 
 </details>
 
@@ -141,6 +155,7 @@ export default defineConfig({
     favicons({
       masterPicture: "./src/favicon.svg",
       emitAssets: true,
+      faviconsDarkMode: true,
     }),
   ],
 });

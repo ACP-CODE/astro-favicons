@@ -24,6 +24,11 @@ export interface FaviconConfig extends FaviconOptions {
   */
   emitAssets?: boolean;
   /**
+   * @description
+   * Change Favicon for Light and Dark Mode.
+   */
+  faviconsDarkMode?: boolean;
+  /**
    * @default
    * ```ts
    * path: "/"

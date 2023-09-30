@@ -10,13 +10,14 @@ export const defaultConfig: FaviconOptions = {
   appName: "Welcome to Astro Favicons.",
   appShortName: "Astro Favicons",
   appDescription: "A Multi-platform Favicon generator for Astro Project.",
+  faviconsDarkMode: true,
   icons: {
     android: [
       "android-chrome-192x192.png",
       "android-chrome-512x512.png"
     ],
     appleIcon: [
-      "apple-touch-icon.png"
+      {name:"apple-touch-icon.png", offset:11.5}
     ],
     appleStartup: false,
     favicons: true,
@@ -154,7 +155,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   if (compressHTML) {
     htmlTags = `${response.html.join('').replaceAll('\n', '')}`;
   } else {
-    htmlTags = `\n\n<!-- Astro Favicons v0.2.0 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n\t`;
+    htmlTags = `\n\n<!-- Astro Favicons v1.0.1 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n\t`;
   }
 
   return {
