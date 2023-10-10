@@ -4,7 +4,7 @@ This file documents all significant modifications made to the Astro Integration 
 
 ## 1.1.0
 
-- Update typo in README.md
+- [79b3ad6](https://github.com/ACP-CODE/astro-favicons/pull/2/commits/79b3ad6ccbfcd6bbda80026d0686adde83ed4035)  - Update typo in README.md
 - Update the JSDoc description about faviconsDarkMode. If you do not need to be compatible with the browser dark mode, you can set it to false.
 
 ## 1.0.1
