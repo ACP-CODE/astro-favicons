@@ -7,10 +7,10 @@ import { logger } from "./utils";
 
 export const defaultConfig: FaviconOptions = {
   path: "/",
-  appName: "Welcome to Astro Favicons.",
-  appShortName: "Astro Favicons",
-  appDescription: "A Multi-platform Favicon generator for Astro Project.",
-  faviconsDarkMode: true,
+  appName: "",
+  appShortName: "",
+  appDescription: "",
+  faviconsDarkMode: false,
   icons: {
     android: [
       "android-chrome-192x192.png",
