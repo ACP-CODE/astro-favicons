@@ -81,77 +81,28 @@ export default defineConfig({
    Following HTML Code will **automatically insert** in the `head` section of all pages.
 
 ```html
-<!-- Astro Favicons v1.0.0 - https://github.com/ACP-CODE/astro-favicons -->
-<link
-  rel="icon"
-  type="image/x-icon"
-  href="/favicon.ico"
-  media="(prefers-color-scheme: light)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="16x16"
-  href="/favicon-16x16.png"
-  media="(prefers-color-scheme: light)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="32x32"
-  href="/favicon-32x32.png"
-  media="(prefers-color-scheme: light)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="48x48"
-  href="/favicon-48x48.png"
-  media="(prefers-color-scheme: light)"
-/>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link
-  rel="icon"
-  type="image/x-icon"
-  href="/favicon-dark.ico"
-  media="(prefers-color-scheme: dark)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="16x16"
-  href="/favicon-16x16-dark.png"
-  media="(prefers-color-scheme: dark)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="32x32"
-  href="/favicon-32x32-dark.png"
-  media="(prefers-color-scheme: dark)"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="48x48"
-  href="/favicon-48x48-dark.png"
-  media="(prefers-color-scheme: dark)"
-/>
-<link rel="manifest" href="/manifest.webmanifest" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="theme-color" content="#fff" />
-<meta name="application-name" content="Your Application Name" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent"
-/>
-<meta name="apple-mobile-web-app-title" content="Application Name" />
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
-<meta name="msapplication-TileColor" content="#fff" />
-<meta name="msapplication-config" content="/browserconfig.xml" />
-<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json" />
+<!-- Astro Favicons v1.0.3 - https://github.com/ACP-CODE/astro-favicons -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"  media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48-dark.png"  media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fff">
+<meta name="application-name" content="Welcome to Astro Favicons.">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Astro Favicons">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff">
+<meta name="msapplication-TileColor" content="#fff">
+<meta name="msapplication-config" content="/browserconfig.xml">
+<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json">
 <!--  Astro Favicons -->
 ```
 

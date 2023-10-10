@@ -155,7 +155,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   if (compressHTML) {
     htmlTags = `${response.html.join('').replaceAll('\n', '')}`;
   } else {
-    htmlTags = `\n\n<!-- Astro Favicons v1.0.1 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n\t`;
+    htmlTags = `\n\n<!-- Astro Favicons v1.0.3 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n\t`;
   }
 
   return {

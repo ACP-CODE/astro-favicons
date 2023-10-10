@@ -2,7 +2,7 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
-## 1.0.2
+## 1.0.3
 
 - Update typo in README.md
 - Update the JSDoc description about faviconsDarkMode. If you do not need to be compatible with the browser dark mode, you can set it to false.
