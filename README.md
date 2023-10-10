@@ -30,8 +30,6 @@ npm install astro-favicons
 
 ## Usage
 
-<details>
-
 <summary>Adding the configuration for Integration.</summary>
 
 To use this integration, add it to your `astro.config.*` file using the integrations property:
@@ -39,7 +37,7 @@ To use this integration, add it to your `astro.config.*` file using the integrat
 ```ts
 // astro.config.mjs
 import { defineConfig } from "astro/config";
-import robots from "astro-favicons"; // Add code manually
+import favicons from "astro-favicons"; // Add code manually
 
 export default defineConfig({
   compressHTML: import.meta.env.PROD,
@@ -49,7 +47,7 @@ export default defineConfig({
       // masterPicture: "./src/favicon.svg",
       // emitAssets: true,
 
-      // You should adjust the following options accordingly
+      // IMPORTANT: Adjust the following three options to name your RSS feed
       appName: "",
       appShortName: "",
       appDescription: "",
@@ -67,8 +65,6 @@ export default defineConfig({
   ],
 });
 ```
-
-</details>
 
 <details>
 
