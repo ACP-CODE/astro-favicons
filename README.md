@@ -7,7 +7,6 @@
 A Multi-platform (iOS13+、Android、Windows、macOS、chromeOS etc.),
 All Browser(Chrome、 Safari、Firefox、Yandex、IE、Edge ) Favicon generator for [Astro](https://astro.build/) Project.
 
-
 [Features](#features) · [Installation](#installation) · [Usage](#usage) · [Configuration](#configuration) · [Change Log](/CHANGELOG.md)
 
 </div>
@@ -18,7 +17,6 @@ All Browser(Chrome、 Safari、Firefox、Yandex、IE、Edge ) Favicon generator 
 - Automatically creates favicon assets for different environments using one source file.
 - Simplify or optimize communication between teams to avoid missing files.
 - Change Favicon for Light and Dark Mode.
-
 
 ## Installation
 
@@ -39,7 +37,7 @@ To use this integration, add it to your `astro.config.*` file using the integrat
 ```ts
 // astro.config.mjs
 import { defineConfig } from "astro/config";
-import robots from "astro-favicons"; // Add code manually
+import favicons from "astro-favicons"; // Add code manually
 
 export default defineConfig({
   compressHTML: import.meta.env.PROD,
@@ -60,6 +58,9 @@ export default defineConfig({
       // start_url: "/?homescreen=1",
       background: "#fff",
       theme_color: "#fff",
+
+      faviconsDarkMode: false, // default `true`, Make favicon compatible with light and dark modes
+      
       // appleStatusBarStyle: "black-translucent",
 
       //....
@@ -81,27 +82,76 @@ export default defineConfig({
 
 ```html
 <!-- Astro Favicons v1.0.0 - https://github.com/ACP-CODE/astro-favicons -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico" media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#fff">
-<meta name="application-name" content="Your Application Name">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Application Name">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff">
-<meta name="msapplication-TileColor" content="#fff">
-<meta name="msapplication-config" content="/browserconfig.xml">
-<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json">
+<link
+  rel="icon"
+  type="image/x-icon"
+  href="/favicon.ico"
+  media="(prefers-color-scheme: light)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon-16x16.png"
+  media="(prefers-color-scheme: light)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon-32x32.png"
+  media="(prefers-color-scheme: light)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="48x48"
+  href="/favicon-48x48.png"
+  media="(prefers-color-scheme: light)"
+/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link
+  rel="icon"
+  type="image/x-icon"
+  href="/favicon-dark.ico"
+  media="(prefers-color-scheme: dark)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon-16x16-dark.png"
+  media="(prefers-color-scheme: dark)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon-32x32-dark.png"
+  media="(prefers-color-scheme: dark)"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="48x48"
+  href="/favicon-48x48-dark.png"
+  media="(prefers-color-scheme: dark)"
+/>
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#fff" />
+<meta name="application-name" content="Your Application Name" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
+<meta name="apple-mobile-web-app-title" content="Application Name" />
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
+<meta name="msapplication-TileColor" content="#fff" />
+<meta name="msapplication-config" content="/browserconfig.xml" />
+<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json" />
 <!--  Astro Favicons -->
 ```
 
@@ -145,7 +195,7 @@ npm run build
 
 ## Configuration
 
- ### Base Options
+### Base Options
 
 This is the underlying API of the plugin `masterPicture` and `emitAssets`
 
@@ -167,7 +217,7 @@ Since FaviconConfig extends FaviconOptions, please refer to [favicons](https://w
 
 > **Difference：** I simply added the `Safari` platform on top of favcions to support `safari-pinned-tab.svg` generation and tag logging.
 
-Future upgrades of the core may be spent more on the favicons-lib library 
+Future upgrades of the core may be spent more on the favicons-lib library
 
 ## Need Help or Feedback?
 
