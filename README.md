@@ -81,7 +81,7 @@ export default defineConfig({
    Following HTML Code will **automatically insert** in the `head` section of all pages.
 
 ```html
-<!-- Astro Favicons v1.0.3 - https://github.com/ACP-CODE/astro-favicons -->
+<!-- Astro Favicons v1.1.0 - https://github.com/ACP-CODE/astro-favicons -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico" media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"  media="(prefers-color-scheme: light)">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"  media="(prefers-color-scheme: light)">
