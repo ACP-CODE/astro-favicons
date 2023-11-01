@@ -1,6 +1,8 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import type { FaviconOptions } from 'favicons-lib';
 
+import { fileURLToPath } from "url";
+
 import { packageName } from './data/pkg-name';
 import { defaultConfig, createFiles, vitePluginFavicons } from './core';
 
@@ -165,7 +167,7 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
     hooks: {
       'astro:config:setup': async ({ config: cfg, updateConfig, logger }) => {
         config = cfg;
-        dest = config.publicDir.pathname;
+        dest = fileURLToPath(config.publicDir);
         compress = config.compressHTML;
 
         source = faviconConfig?.masterPicture || "./src/favicon.svg";
