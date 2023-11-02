@@ -1,6 +1,6 @@
 {
   "name": "astro-favicons",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "A Multi-platform, All Browser Favicon generator for Astro Project.",
   "types": "./dist/index.d.ts",

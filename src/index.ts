@@ -157,7 +157,7 @@ interface IconOptions {
 export default function createFaviconsIntegration(faviconConfig: FaviconConfig): AstroIntegration {
   let config: AstroConfig;
 
-  let source: string, dest: string, compress: boolean, emit: boolean;
+  let source: string, dest: URL, compress: boolean, emit: boolean;
   const mergedConfig = { ...defaultConfig, ...faviconConfig };
 
   return {
@@ -165,7 +165,7 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
     hooks: {
       'astro:config:setup': async ({ config: cfg, updateConfig, logger }) => {
         config = cfg;
-        dest = config.publicDir.pathname;
+        dest = config.publicDir;
         compress = config.compressHTML;
 
         source = faviconConfig?.masterPicture || "./src/favicon.svg";

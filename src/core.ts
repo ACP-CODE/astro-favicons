@@ -1,7 +1,6 @@
 import favicons from "favicons-lib";
 import type { FaviconOptions } from "favicons-lib";
 import fs from "fs/promises";
-import path from "path";
 
 import { logger } from "./utils";
 
@@ -17,7 +16,7 @@ export const defaultConfig: FaviconOptions = {
       "android-chrome-512x512.png"
     ],
     appleIcon: [
-      {name:"apple-touch-icon.png", offset:11.5}
+      { name: "apple-touch-icon.png", offset: 11.5 }
     ],
     appleStartup: false,
     favicons: true,
@@ -73,31 +72,35 @@ function getPlatform(fileName: string) {
   return 'Unknown';
 }
 
-function fixPath(path: string) {
-  if (!path.startsWith('/')) {
-    path = '/' + path;
-  }
+function fixOutPath(path: string): string {
+  path = path
+    // 去除开头结尾多余的 `/` 和 `..`
+    .replace(/(?:^\/?)|(?:\/+$)|(?:\.{2}\/)/g, '')
+    // 将多个空格替换为单个 `/`
+    .replace(/\s+/g, '/')
+    // 将开头多个 `/` 替换为空
+    .replace(/^\/+/, '');
 
-  // 匹配一个或多个'/'结尾
-  const regex = /\/+$/;
-
-  if (regex.test(path)) {
-    path = path.replace(regex, '/');
-  } else if (!path.endsWith('/')) {
-    path += '/';
-  }
+    if(!path) {
+      path = '';
+    } else if(!path.endsWith('/')) {
+      path += '/';
+    }
 
   return path;
 }
 
 
-
-export async function createFiles(src: string, dist: string, options: FaviconOptions) {
+export async function createFiles(src: string, dist: URL, options: FaviconOptions) {
 
   const startTime = Date.now();
 
+  let path = fixOutPath(options.path  || "/");
   // Out directory
-  const dest = `${dist}${options.path}`;
+  const dest = new URL(path, dist);
+
+  // console.log(dist);
+  // console.log(dest);
 
   // Below is the processing.
   const response = await favicons(src, options);
@@ -111,10 +114,10 @@ export async function createFiles(src: string, dist: string, options: FaviconOpt
   await Promise.all(
     response.images.map(async (image, index) => {
       const startTime = Date.now();
-      await fs.writeFile(path.join(dest, image.name), image.contents);
+      await fs.writeFile(new URL(image.name, dest), image.contents);
       const endTime = Date.now();
       const excutionTime = endTime - startTime;
-      return imgLogs.push(`\x1b[2m${fixPath(options.path || "/")}${image.name} (+${excutionTime}ms)\x1b[22m`);
+      return imgLogs.push(`\x1b[2m/${fixOutPath(options.path || "/")}${image.name} (+${excutionTime}ms)\x1b[22m`);
     }),
   );
 
@@ -122,10 +125,10 @@ export async function createFiles(src: string, dist: string, options: FaviconOpt
   await Promise.all(
     response.files.map(async (file, index) => {
       const startTime = Date.now();
-      await fs.writeFile(path.join(dest, file.name), file.contents);
+      await fs.writeFile(new URL(file.name, dest), file.contents);
       const endTime = Date.now();
       const excutionTime = endTime - startTime;
-      return fileLogs.push(`\x1b[2m${fixPath(options.path || "/")}${file.name} (+${excutionTime}ms)\x1b[22m`);
+      return fileLogs.push(`\x1b[2m/${fixOutPath(options.path || "/")}${file.name} (+${excutionTime}ms)\x1b[22m`);
     }),
   );
 
@@ -155,7 +158,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   if (compressHTML) {
     htmlTags = `${response.html.join('').replaceAll('\n', '')}`;
   } else {
-    htmlTags = `\n\n<!-- Astro Favicons v1.1.0 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n\t`;
+    htmlTags = `\n\n<!-- Astro Favicons v1.1.1 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n`;
   }
 
   return {
