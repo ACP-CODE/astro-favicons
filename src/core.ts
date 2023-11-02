@@ -158,19 +158,19 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   if (compressHTML) {
     htmlTags = `${response.html.join('').replaceAll('\n', '')}`;
   } else {
-    htmlTags = `\n\n<!-- Astro Favicons v1.1.1 - https://github.com/ACP-CODE/astro-favicons -->\n${response.html.join('\n').replace(/(?<!\n)\n\n+(?!\n)/g, '\n')}\n<!--  Astro Favicons -->\n`;
+    htmlTags = `\\n\\n<!-- Astro Favicons v1.2.0 - https://github.com/ACP-CODE/astro-favicons -->\\n${response.html.join('\\n').replace(/(?<!\\n)\\n\\n+(?!\\n)/g, '\n')}\\n<!--  Astro Favicons -->\\n\\t`;
   }
-
   return {
     name: 'vite-plugin-favicons',
     enforce: 'pre',
     transform(html: string) {
       try {
-        return html.replace('</head>', `${htmlTags}</head>`);
+        // console.log(html)
+        const regex = /"/g;
+        return html.replace('</head>', `${htmlTags.replace(regex, '\\"')}</head>`);
       } catch (error) {
         throw error;
       }
     }
   }
-
 };

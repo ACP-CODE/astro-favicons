@@ -2,6 +2,10 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+## 1.2.0
+
+- [issues#3](https://github.com/ACP-CODE/astro-favicons/issues/3) - May be fixed.
+
 ## 1.1.1
 
 - [issues#4](https://github.com/ACP-CODE/astro-favicons/issues/4) - May be fixed.
