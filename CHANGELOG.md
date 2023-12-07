@@ -2,6 +2,10 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+## 2.0.1
+
+- Fixed an issue where the color displayed on the terminal in dark night mode is inconsistent with the Astro 4.0.0 logger display。
+
 ## 2.0.0
 
 - Make it look more like `astro v4.0.0`’s logger system.

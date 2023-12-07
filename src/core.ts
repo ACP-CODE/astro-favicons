@@ -2,9 +2,7 @@ import favicons from "favicons-lib";
 import type { FaviconOptions } from "favicons-lib";
 import fs from "fs/promises";
 
-// import { logger } from "./utils";
 import type { AstroIntegrationLogger } from "astro";
-
 
 export const defaultConfig: FaviconOptions = {
   path: "/",
@@ -31,7 +29,6 @@ export const defaultConfig: FaviconOptions = {
   },
 };
 
-
 function timeMsg() {
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, '0');
@@ -39,6 +36,7 @@ function timeMsg() {
   const seconds = now.getSeconds().toString().padStart(2, '0');
   return `\x1b[2m${hours}:${minutes}:${seconds}\x1b[22m`;
 }
+
 function logInfo(logs: string[]) {
   logs.forEach((log, idx) => {
     let symbol: string = '\u2514\u2500';
@@ -78,10 +76,8 @@ function fixOutPath(path: string): string {
   } else if (!path.endsWith('/')) {
     path += '/';
   }
-
   return path;
 }
-
 
 export async function createFiles(src: string, dist: URL, options: FaviconOptions, logger: AstroIntegrationLogger) {
 
@@ -96,8 +92,9 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
 
   // Below is the processing.
   const response = await favicons(src, options);
+  logger.info(`Parsing options...`);
 
-  // let totalFile: number = response.images.length + response.files.length;
+  let totalFile: number = response.images.length + response.files.length;
   let imgLogs: string[] = [], fileLogs: string[] = [];
 
   await fs.mkdir(dest, { recursive: true });
@@ -127,8 +124,7 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
   const totalTime = (Date.now() - startTime) / 1000;
 
   // Log infos
-  logger.info(`Parsing options...`);
-  console.log(`\n\x1b[42m generating favicons \x1b[0m`);
+  console.log(`\n\x1b[42m\x1b[30m generating favicons \x1b[39m\x1b[49m`);
   console.log(`${timeMsg()} \x1b[32m\u25B6\x1b[0m ${src.replace(/^\.\//, '')}`);
   logInfo(imgLogs);
   fileLogs.forEach((log) => {
@@ -136,9 +132,7 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
     console.log(`${timeMsg()}   \x1b[34m\u2514\u2500\x1b[0m ${log}`)
   });
   console.log(`${timeMsg()} \x1b[32m\u2713 Completed in ${totalTime}s.\x1b[39m\n`);
-  // logger.info(`${totalFile} file(s) built in \x1b[1m${totalTime}s\x1b[m`);
-  // logger.info(`\x1b[1mComplete!\x1b[m`);
-
+  logger.info(`${totalFile} file(s) built in \x1b[1m${totalTime}s\x1b[m`);
 };
 
 
@@ -150,7 +144,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   if (compressHTML) {
     htmlTags = `${response.html.join('').replaceAll('\n', '')}`;
   } else {
-    htmlTags = `\\n\\n<!-- Astro Favicons v1.2.0 - https://github.com/ACP-CODE/astro-favicons -->\\n${response.html.join('\\n').replace(/(?<!\\n)\\n\\n+(?!\\n)/g, '\n')}\\n<!--  Astro Favicons -->\\n\\t`;
+    htmlTags = `\\n\\n\\n${response.html.join('\\n').replace(/(?<!\\n)\\n\\n+(?!\\n)/g, '\n')}\\n\\t`;
   }
   return {
     name: 'vite-plugin-favicons',
