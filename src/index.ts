@@ -163,7 +163,7 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
   return {
     name: packageName,
     hooks: {
-      'astro:config:setup': async ({ config: cfg, updateConfig, logger }) => {
+      'astro:config:setup': async ({ config: cfg, updateConfig }) => {
         config = cfg;
         dest = config.publicDir;
         compress = config.compressHTML;
@@ -176,9 +176,9 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
       'astro:server:start': async () => {
 
       },
-      'astro:build:start': () => {
+      'astro:build:start': ({logger}) => {
         if (emit) {
-          createFiles(source, dest, mergedConfig);
+          createFiles(source, dest, mergedConfig, logger);
         }
       }
     },

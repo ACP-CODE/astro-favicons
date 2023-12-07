@@ -20,7 +20,7 @@ All Browser(Chrome、 Safari、Firefox、Yandex、IE、Edge ) Favicon generator 
 
 ## Installation
 
-> This package is compatible with Astro 2.0 and above, which support the Integrations API.
+> This package is compatible with ***Astro 4.0.0*** and above, which support the Integrations API.
 
 ```sh
 npm install astro-favicons

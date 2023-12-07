@@ -2,6 +2,10 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+## 2.0.0
+
+- Make it look more like `astro v4.0.0`’s logger system.
+
 ## 1.2.0
 
 - [issues#3](https://github.com/ACP-CODE/astro-favicons/issues/3) - May be fixed.

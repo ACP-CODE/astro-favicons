@@ -2,7 +2,9 @@ import favicons from "favicons-lib";
 import type { FaviconOptions } from "favicons-lib";
 import fs from "fs/promises";
 
-import { logger } from "./utils";
+// import { logger } from "./utils";
+import type { AstroIntegrationLogger } from "astro";
+
 
 export const defaultConfig: FaviconOptions = {
   path: "/",
@@ -16,7 +18,8 @@ export const defaultConfig: FaviconOptions = {
       "android-chrome-512x512.png"
     ],
     appleIcon: [
-      { name: "apple-touch-icon.png", offset: 11.5 }
+      "apple-touch-icon.png"
+      // { name: "apple-touch-icon.png", offset: 11.5 }
     ],
     appleStartup: false,
     favicons: true,
@@ -28,34 +31,23 @@ export const defaultConfig: FaviconOptions = {
   },
 };
 
-type IconSize = {
-  readonly width: number;
-  readonly height: number;
-}
 
-type IconOptions = {
-  readonly sizes: IconSize[];
-  readonly offset?: number;
-  readonly background?: string | boolean;
-  readonly transparent: boolean;
-  readonly rotate: boolean;
-  readonly purpose?: string;
-  readonly pixelArt?: boolean;
+function timeMsg() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  return `\x1b[2m${hours}:${minutes}:${seconds}\x1b[22m`;
 }
-
-interface NamedIconOptions extends IconOptions {
-  readonly name: string;
-}
-
 function logInfo(logs: string[]) {
   logs.forEach((log, idx) => {
-    let symbol: string = '└─';
+    let symbol: string = '\u2514\u2500';
     if (idx === logs.length - 1) {
-      symbol = '└─';
+      symbol = '\u2514\u2500';
     } else {
-      symbol = '├─'
+      symbol = '\u251C\u2500'
     }
-    console.log(`  \x1b[36m${symbol}\x1b[0m ${log}`)
+    console.log(`${timeMsg()}   \x1b[34m${symbol}\x1b[0m ${log}`)
   });
 }
 
@@ -81,21 +73,21 @@ function fixOutPath(path: string): string {
     // 将开头多个 `/` 替换为空
     .replace(/^\/+/, '');
 
-    if(!path) {
-      path = '';
-    } else if(!path.endsWith('/')) {
-      path += '/';
-    }
+  if (!path) {
+    path = '';
+  } else if (!path.endsWith('/')) {
+    path += '/';
+  }
 
   return path;
 }
 
 
-export async function createFiles(src: string, dist: URL, options: FaviconOptions) {
+export async function createFiles(src: string, dist: URL, options: FaviconOptions, logger: AstroIntegrationLogger) {
 
   const startTime = Date.now();
 
-  let path = fixOutPath(options.path  || "/");
+  let path = fixOutPath(options.path || "/");
   // Out directory
   const dest = new URL(path, dist);
 
@@ -105,14 +97,14 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
   // Below is the processing.
   const response = await favicons(src, options);
 
-  let totalFile: number = response.images.length + response.files.length;
+  // let totalFile: number = response.images.length + response.files.length;
   let imgLogs: string[] = [], fileLogs: string[] = [];
 
   await fs.mkdir(dest, { recursive: true });
 
   // Create image
   await Promise.all(
-    response.images.map(async (image, index) => {
+    response.images.map(async (image) => {
       const startTime = Date.now();
       await fs.writeFile(new URL(image.name, dest), image.contents);
       const endTime = Date.now();
@@ -123,7 +115,7 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
 
   // Create file
   await Promise.all(
-    response.files.map(async (file, index) => {
+    response.files.map(async (file) => {
       const startTime = Date.now();
       await fs.writeFile(new URL(file.name, dest), file.contents);
       const endTime = Date.now();
@@ -137,15 +129,15 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
   // Log infos
   logger.info(`Parsing options...`);
   console.log(`\n\x1b[42m generating favicons \x1b[0m`);
-  console.log(`\x1b[32m▶\x1b[0m ${src.replace(/^\.\//, '')}`);
+  console.log(`${timeMsg()} \x1b[32m\u25B6\x1b[0m ${src.replace(/^\.\//, '')}`);
   logInfo(imgLogs);
-  fileLogs.forEach((log, idx) => {
-    console.log(`\x1b[32m▶\x1b[0m ${getPlatform(log)}`);
-    console.log(`  \x1b[36m└─\x1b[0m ${log}`)
+  fileLogs.forEach((log) => {
+    console.log(`${timeMsg()} \x1b[32m\u25B6\x1b[0m ${getPlatform(log)}`);
+    console.log(`${timeMsg()}   \x1b[34m\u2514\u2500\x1b[0m ${log}`)
   });
-  console.log(`\x1b[2mCompleted in ${totalTime}s.\x1b[22m\n`);
-  logger.info(`${totalFile} file(s) built in \x1b[1m${totalTime}s\x1b[m`);
-  logger.info(`\x1b[1mComplete!\x1b[m`);
+  console.log(`${timeMsg()} \x1b[32m\u2713 Completed in ${totalTime}s.\x1b[39m\n`);
+  // logger.info(`${totalFile} file(s) built in \x1b[1m${totalTime}s\x1b[m`);
+  // logger.info(`\x1b[1mComplete!\x1b[m`);
 
 };
 
@@ -162,7 +154,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   }
   return {
     name: 'vite-plugin-favicons',
-    enforce: 'pre',
+    // enforce: 'pre',
     transform(html: string) {
       try {
         // console.log(html)
