@@ -148,8 +148,8 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
   }
   return {
     name: 'vite-plugin-favicons',
-    // enforce: 'pre',
-    transform(html: string) {
+    enforce: 'pre' as 'pre',
+    transform(html: string){
       try {
         // console.log(html)
         const regex = /"/g;

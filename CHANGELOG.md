@@ -2,6 +2,10 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+## 2.0.2
+
+- [issues#7](https://github.com/ACP-CODE/astro-favicons/issues/7#issue-2036516313) - May be fixed (I'm not so sure, I just rolled back to the previous version).
+
 ## 2.0.1
 
 - Fixed an issue where the color displayed on the terminal in dark night mode is inconsistent with the Astro 4.0.0 logger display。
