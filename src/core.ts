@@ -87,8 +87,8 @@ export async function createFiles(src: string, dist: URL, options: FaviconOption
   // Out directory
   const dest = new URL(path, dist);
 
-  // logger.info(dist);
-  // logger.info(dest);
+  // console.log(dist);
+  // console.log(dest);
 
   // Below is the processing.
   const response = await favicons(src, options);
@@ -151,7 +151,7 @@ export async function vitePluginFavicons(src: string, options: FaviconOptions, c
     enforce: 'pre' as 'pre',
     transform(html: string){
       try {
-        // logger.info(html)
+        // console.log(html)
         const regex = /"/g;
         return html.replace('</head>', `${htmlTags.replace(regex, '\\"')}</head>`);
       } catch (error) {
