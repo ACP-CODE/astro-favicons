@@ -36,7 +36,7 @@ export interface FaviconConfig extends FaviconOptions {
    * @description
    * Place files (`favicon.ico`, `apple-touch-icon.png`, etc.) at the root of web site. [Recommended](../WHY.md).
    */
-  path: string;
+  path?: string;
   /**
    * @description
    * Refer to `name` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#name-member)
@@ -176,7 +176,7 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
       'astro:server:start': async () => {
 
       },
-      'astro:build:start': ({logger}) => {
+      'astro:build:start': ({ logger }) => {
         if (emit) {
           createFiles(source, dest, mergedConfig, logger);
         }

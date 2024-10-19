@@ -2,6 +2,11 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+## 2.1.0
+
+- Added support for splashscrens: iPhone 14 Pro, iPhone 15 Pro, iPhone 15, iPhone 14 Pro Max, iPhone 15 Pro Max, iPhone 15 Plus, 8.3” iPad Mini, 10.9” iPad Air （虽然不是很重要，因为默认设置是关闭了该文件的生成）
+- 修复 [#11](https://github.com/ACP-CODE/astro-favicons/issues/11) - `path` 未设置情况下，在 `astro.config.ts` 中会出现 ts 报错的问题
+
 ## 2.0.2
 
 - [issues#7](https://github.com/ACP-CODE/astro-favicons/issues/7#issue-2036516313) - May be fixed (I'm not so sure, I just rolled back to the previous version).

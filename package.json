@@ -1,6 +1,6 @@
 {
   "name": "astro-favicons",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "type": "module",
   "description": "A Multi-platform, All Browser Favicon generator for Astro Project.",
   "types": "./dist/index.d.ts",
@@ -40,11 +40,11 @@
   },
   "homepage": "https://github.com/ACP-CODE/astro-favicons#readme",
   "devDependencies": {
-    "@types/node": "^20.10.4",
-    "astro": "^4.0.3",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.7.7",
+    "astro": "^4.16.6",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "favicons-lib": "^7.1.6"
+    "favicons-lib": "^7.1.8"
   }
 }
