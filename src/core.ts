@@ -10,7 +10,7 @@ export const defaultConfig: FaviconOptions = {
   appShortName: "Astro Favicons",
   appDescription: "A Multi-platform Favicon generator for Astro Project.",
   dir: "rtl",
-  faviconsDarkMode: true,
+  display_override: ["window-controls-overlay", "standalone"],
   icons: {
     android: [
       "android-chrome-192x192.png",
@@ -28,6 +28,7 @@ export const defaultConfig: FaviconOptions = {
     ],
     yandex: true,
   },
+  faviconsDarkMode: true,
 };
 
 function timeMsg() {

@@ -2,12 +2,14 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+# 2.1.4
+- Simplify type definitions, and properly revamp jsdoc (plan to update the complete documentation website when time permits)
+
 # 2.1.3
 
 ### Major Changes
 
  - [#13](https://github.com/ACP-CODE/astro-favicons/issues/13) - Updated support for `manifest.webmanifest` to allow it to be validated through Application in Google Chrome Dev Tools. (暂无时间更新文档，具体参见 `favicons-lib` 中的 jsdoc 变更)
-
 
  - 移除了 `safari` 作为平台存在，`safari-pinned-tab.svg` 实现部分并入 `appleIcon`
 
