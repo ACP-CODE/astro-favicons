@@ -2,6 +2,15 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+# 2.1.3
+
+### Major Changes
+
+ - [#13](https://github.com/ACP-CODE/astro-favicons/issues/13) - Updated support for `manifest.webmanifest` to allow it to be validated through Application in Google Chrome Dev Tools. (暂无时间更新文档，具体参见 `favicons-lib` 中的 jsdoc 变更)
+
+
+ - 移除了 `safari` 作为平台存在，`safari-pinned-tab.svg` 实现部分并入 `appleIcon`
+
 ## 2.1.0
 
 - Added support for splashscrens: iPhone 14 Pro, iPhone 15 Pro, iPhone 15, iPhone 14 Pro Max, iPhone 15 Pro Max, iPhone 15 Plus, 8.3” iPad Mini, 10.9” iPad Air （虽然不是很重要，因为默认设置是关闭了该文件的生成）

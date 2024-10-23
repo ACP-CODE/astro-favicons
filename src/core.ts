@@ -9,6 +9,7 @@ export const defaultConfig: FaviconOptions = {
   appName: "Welcome to Astro Favicons.",
   appShortName: "Astro Favicons",
   appDescription: "A Multi-platform Favicon generator for Astro Project.",
+  dir: "rtl",
   faviconsDarkMode: true,
   icons: {
     android: [
@@ -16,7 +17,8 @@ export const defaultConfig: FaviconOptions = {
       "android-chrome-512x512.png"
     ],
     appleIcon: [
-      "apple-touch-icon.png"
+      "apple-touch-icon.png",
+      "safari-pinned-tab.svg"
       // { name: "apple-touch-icon.png", offset: 11.5 }
     ],
     appleStartup: false,
@@ -25,7 +27,6 @@ export const defaultConfig: FaviconOptions = {
       "mstile-150x150.png"
     ],
     yandex: true,
-    safari: true,
   },
 };
 

@@ -46,7 +46,7 @@ export interface FaviconConfig extends FaviconOptions {
    * @description
    * Refer to `short_name` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#short_name-member-0)
    */
-  appShortName: string;
+  appShortName?: string;
   /**
    * @description
    * Refer to `description` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#description-member)
@@ -99,7 +99,7 @@ export interface FaviconConfig extends FaviconOptions {
    * @description
    * Refer to `display` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#display-member)
    */
-  display?: "fullscreen" | "standalone" | "minimal-ui" | "browser";
+  display?: FaviconOptions["display"];
   /**
    * @default
    * ```ts
@@ -124,16 +124,86 @@ export interface FaviconConfig extends FaviconOptions {
    */
   relatedApplications?: Application[];
 
-  icons?: Record<PlatformName, IconOptions | boolean | string[]>;
+  icons?: FaviconOptions["icons"];
 }
 
-interface Application {
-  readonly platform?: string;
-  readonly url?: string;
+/**
+ * Represents a related application that is associated with a Progressive Web App (PWA).
+ */
+export interface Application {
+  /**
+   * The platform where the related application is available.
+   * Common values include:
+   * - "play": Google Play Store
+   * - "itunes": Apple App Store
+   * - "windows": Microsoft Store
+   * - "webapp": A related web application
+   *
+   * Other custom platforms can be defined as well.
+   */
+  readonly platform: "play" | "itunes" | "windows" | "webapp" | string;
+
+  /**
+   * The URL where the related application can be downloaded or accessed.
+   * This is typically a link to the app store or a web page for the app.
+   *
+   * Example: "https://play.google.com/store/apps/details?id=com.example.app"
+   */
+  readonly url: string;
+
+  /**
+   * A unique identifier for the application.
+   * For Google Play Store, this is usually the package name (e.g., "com.example.app").
+   * For iTunes, this might be the app's ID (e.g., "id123456789").
+   *
+   * This field is optional but recommended for precise identification.
+   */
   readonly id?: string;
+
+  /**
+   * Specifies the minimum version of the related application that is supported.
+   * If a user has a version lower than this, they may be prompted to update.
+   *
+   * Example: "2" (indicating version 2 or higher is required)
+   */
+  readonly min_version?: string;
+
+  /**
+   * An array of fingerprints used to verify the integrity of the application.
+   * This helps ensure that the application is authentic and hasn't been tampered with.
+   * Each fingerprint includes a `type` and a `value`.
+   *
+   * Example:
+   * ```
+   * fingerprints: [
+   *   {
+   *     type: "sha256_cert",
+   *     value: "92:5A:39:05:C5:B9:EA:BC:71:48:5F:F2"
+   *   }
+   * ]
+   * ```
+   */
+  readonly fingerprints?: Array<{
+    /**
+     * The type of fingerprint used for verification.
+     * Commonly, "sha256_cert" is used to represent a SHA-256 hash of the app's signing certificate.
+     *
+     * Custom types can be defined if needed.
+     */
+    readonly type: "sha256_cert" | string;
+
+    /**
+     * The hash value used for verification.
+     * This is typically a SHA-256 hash, represented as a colon-separated string of hex values.
+     *
+     * Example: "92:5A:39:05:C5:B9:EA:BC:71:48:5F:F2"
+     */
+    readonly value: string;
+  }>;
 }
 
-type PlatformName = "android" | "appleIcon" | "appleStartup" | "favicons" | "windows" | "yandex" | "safari";
+
+type PlatformName = "android" | "appleIcon" | "appleStartup" | "favicons" | "windows" | "yandex";
 
 interface IconSize {
   readonly width: number;
