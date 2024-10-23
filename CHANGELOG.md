@@ -2,6 +2,10 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
+# 2.1.5
+
+- fixed `package.json`
+
 # 2.1.4
 - Simplify type definitions, and properly revamp jsdoc (plan to update the complete documentation website when time permits)
 
