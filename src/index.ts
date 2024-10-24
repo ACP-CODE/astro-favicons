@@ -1,8 +1,9 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import type { FaviconOptions } from 'favicons-lib';
 
-import { packageName } from './data/pkg-name';
 import { defaultConfig, createFiles, vitePluginFavicons } from './core';
+
+export const packageName = 'astro-favicons';
 
 export interface FaviconConfig extends FaviconOptions {
   /**
