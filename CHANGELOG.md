@@ -2,16 +2,17 @@
 
 This file documents all significant modifications made to the Astro Integration `astro-favicons`.
 
-# 2.1.6
+## 2.1.6
 
 - Use `unbuild` to compile
 - Test whether `github actions` is supported
 
-# 2.1.5
+## 2.1.5
 
 - fixed `package.json`
 
-# 2.1.4
+## 2.1.4
+
 - Simplify type definitions, and properly revamp jsdoc (plan to update the complete documentation website when time permits)
 
 # 2.1.3
