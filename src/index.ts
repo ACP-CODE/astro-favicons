@@ -1,7 +1,7 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import type { FaviconOptions } from 'favicons-lib';
 
-import { defaultConfig, createFiles, vitePluginFavicons } from './core';
+import { defaultConfig, createFiles, vitePluginFavicons, logInfo } from './core';
 
 export const packageName = 'astro-favicons';
 
@@ -166,12 +166,19 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
 
         updateConfig({ vite: { plugins: [vitePluginFavicons(source, mergedConfig, compress)] } });
       },
-      'astro:server:start': async () => {
+      'astro:server:start': async () => { },
+      'astro:build:start': async ({ logger }) => {
+        logger.info("Parsing options...");
 
-      },
-      'astro:build:start': ({ logger }) => {
         if (emit) {
-          createFiles(source, dest, mergedConfig, logger);
+          logger.info(`emitAssets: \x1b[33m${emit}\x1b[39m`)
+
+          const { manifestLogs, totalTime } = await createFiles(source, dest, mergedConfig);
+          logInfo(manifestLogs, totalTime, dest);
+
+          logger.info(`${manifestLogs.length} file(s) built in \x1b[1m${totalTime}s\x1b[m`);
+        } else {
+          logger.info(`emitAssets: \x1b[33m${emit}\x1b[39m`)
         }
       }
     },
