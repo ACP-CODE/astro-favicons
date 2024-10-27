@@ -1,7 +1,7 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import type { FaviconOptions } from 'favicons-lib';
 
-import { defaultConfig, createFiles, vitePluginFavicons } from './core';
+import { defaultConfig, createFiles, vitePluginFavicons, logInfo } from './core';
 
 export const packageName = 'astro-favicons';
 
@@ -52,7 +52,11 @@ export interface FaviconConfig extends FaviconOptions {
    * @description
    * Refer to `description` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#description-member)
    */
-  appDescription?: string;
+  appDescription: string;
+   /**
+   * The list of categories the app belongs to.
+   */
+   appCategories?: FaviconOptions["appCategories"];
   /**
    * @default
    * ```js
@@ -129,6 +133,10 @@ export interface FaviconConfig extends FaviconOptions {
    * Refer to `related_applications` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#related_applications-member)
    */
   relatedApplications?: FaviconOptions["relatedApplications"];
+  /**
+   * @description
+   * All platform icons are set here and can refer to defaultconfig to override their values.
+   */
   icons?: FaviconOptions["icons"];
   /**
    * @description
@@ -142,7 +150,7 @@ export interface FaviconConfig extends FaviconOptions {
   shotcuts?: FaviconOptions["shortcuts"];
   /**
    * @description
-   * The `screenshots` member defines an array of screenshots intended to showcase the application.
+   * Array of screenshot image objects, also used by the OS in different contexts..
    */
   screenshots?: FaviconOptions["screenshots"];
 }
@@ -166,12 +174,10 @@ export default function createFaviconsIntegration(faviconConfig: FaviconConfig):
 
         updateConfig({ vite: { plugins: [vitePluginFavicons(source, mergedConfig, compress)] } });
       },
-      'astro:server:start': async () => {
-
-      },
-      'astro:build:start': ({ logger }) => {
+      'astro:server:setup': async () => {},
+      'astro:build:start': async ({ logger }) => {
         if (emit) {
-          createFiles(source, dest, mergedConfig, logger);
+          await createFiles(source, dest, mergedConfig, logger);
         }
       }
     },
