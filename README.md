@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
 [![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
-<center>
+<div align="center">
   
 <img height="128" alt="" src="./assets/logo.svg">
 
@@ -12,7 +12,7 @@ supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (C
 
 With `capo.js` rules, it ensures proper `<head>` ordering, supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
 
-</center>
+</div>
 
 ## Installation
 
