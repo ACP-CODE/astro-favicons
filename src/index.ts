@@ -1,185 +1,60 @@
-import type { AstroConfig, AstroIntegration } from 'astro';
-import type { FaviconOptions } from 'favicons-lib';
+import type { AstroIntegration } from "astro";
+import type { FaviconOptions, Input, InputSource } from "./types";
+import { defaults } from "./config/defaults";
+import { getInput } from "./helpers";
+import { create } from "./plugin";
 
-import { defaultConfig, createFiles, vitePluginFavicons, logInfo } from './core';
-
-export const packageName = 'astro-favicons';
-
-export interface FaviconConfig extends FaviconOptions {
-  /**
-   * @default
-   * ```js
-   * masterPicture: "./src/favicon.svg"
-   * ```
-   * @description
-   * [*Required*] Provide an image (PNG, JPG, SVG...), at least 70x70. `SVG` is preferred.
-   */
-  masterPicture?: string;
-  /**
-  * @default
-  * ```ts
-  * emitAssets: true
-  * ```
-  * @description
-  * [*Optional*] Make your own design. Choose auto-generation or manual image replacement.
-  */
-  emitAssets?: boolean;
+export const name = "astro-favicons";
+export interface Options extends FaviconOptions {
   /**
    * @description
-   * Make favicon compatible with light and dark modes
-   */
-  faviconsDarkMode?: boolean;
-  /**
-   * @default
-   * ```ts
-   * path: "/"
-   * ```
-   * @description
-   * Place files (`favicon.ico`, `apple-touch-icon.png`, etc.) at the root of web site. [Recommended](../WHY.md).
-   */
-  path?: string;
-  /**
-   * @description
-   * Refer to `name` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#name-member)
-   */
-  appName: string;
-  /**
-   * @description
-   * Refer to `short_name` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#short_name-member-0)
-   */
-  appShortName?: string;
-  /**
-   * @description
-   * Refer to `description` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#description-member)
-   */
-  appDescription: string;
-   /**
-   * The list of categories the app belongs to.
-   */
-   appCategories?: FaviconOptions["appCategories"];
-  /**
-   * @default
-   * ```js
-   * dir: "auto"
-   * ```
-   * @description
-   * Refer to `dir` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#dir-member)
-   */
-  dir?: "ltr" | "rtl" | "auto";
-  /**
-   * @default
-   * ```ts
-   * lang: "en-US"
-   * ```
-   * @description
-   * Refer to `lang` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#lang-member)
-   */
-  lang?: string;
-  /**
-   * @description
-   * Refer to `background_color` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#background_color-member)
-   */
-  background?: string;
-  /**
-   * Refer to `theme_color` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#theme_color-member)
-   */
-  theme_color?: string;
-  /**
+   * Specify the source image(s) used to generate platform-specific assets.
+   * @default `public/favicon.svg`.
    * @example
-   * ```html
-   * <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+   * ```js
+   * input: {
+   *  yandex: ["public/favicon.svg", readFile("src/favicons/pixel.png")]
+   * }
    * ```
-   * @description
-   * Used to control the style of the status bar in a web app added to the home screen on iOS devices.
-   * - `default` - The status bar appears normally with a black background color. This is the default value.
-   * - `black-translucent` - The status bar is translucent black.
-   * - `black-opaque` - The status bar is solid black.
    */
-  appleStatusBarStyle?: "default" | "black-translucent" | "black-opaque";
+  input?: Input;
   /**
-   * @default
-   * ```ts
-   * display: "standalone"
-   * ```
-   * @description
-   * Refer to `display` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#display-member)
+   * Get the ﹤𝚑𝚎𝚊𝚍﹥ in order
+   * @default true
    */
-  display?: FaviconOptions["display"];
-  /**
-   * @default
-   * ```ts
-   * orientation: "any"
-   * ```
-   * @description
-   * [*Optional*] Refer to `orientation` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#orientation-member)
-   */
-  orientation?: "any" | "natural" | "landscape" | "portrait" | "portrait-primary" | "portrait-secondary" | "landscape-primary" | "landscape-secondary";
-  /**
-   * [*Optional*] Refer to `scope` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#scope-member)
-   */
-  scope?: string;
-  /**
-   * @description
-   * Refer to `start_url` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#start_url-member)
-   */
-  start_url?: string;
-  /**
-   * @description
-   * Refer to [MDN](https://developer.mozilla.org/en-US/docs/Web/Manifest/protocol_handlers)  Manifest `protocol_handlers`
-   */
-  protocol_handlers?: FaviconOptions["protocol_handlers"];
-  /**
-   * @description
-   * Refer to `related_applications` of [Web Application Manifest](https://www.w3.org/TR/appmanifest/#related_applications-member)
-   */
-  relatedApplications?: FaviconOptions["relatedApplications"];
-  /**
-   * @description
-   * All platform icons are set here and can refer to defaultconfig to override their values.
-   */
-  icons?: FaviconOptions["icons"];
-  /**
-   * @description
-   * Refer to [MDN](https://developer.mozilla.org/en-US/docs/Web/Manifest/share_target)
-   */
-  share_target?: FaviconOptions["share_target"];
-  /**
-   * @description
-   * The `shortcuts` manifest member is used to specify links to key tasks or pages within your web application.
-   */
-  shotcuts?: FaviconOptions["shortcuts"];
-  /**
-   * @description
-   * Array of screenshot image objects, also used by the OS in different contexts..
-   */
-  screenshots?: FaviconOptions["screenshots"];
+  capo?: boolean;
 }
 
-export default function createFaviconsIntegration(faviconConfig: FaviconConfig): AstroIntegration {
-  let config: AstroConfig;
-
-  let source: string, dest: URL, compress: boolean, emit: boolean;
-  const mergedConfig = { ...defaultConfig, ...faviconConfig };
+export default function createIntegration(options?: Options): AstroIntegration {
+  let sources: InputSource;
+  const opts = { ...defaults, ...options };
 
   return {
-    name: packageName,
+    name,
     hooks: {
-      'astro:config:setup': async ({ config: cfg, updateConfig }) => {
-        config = cfg;
-        dest = config.publicDir;
-        compress = config.compressHTML;
-
-        source = faviconConfig?.masterPicture || "./src/favicon.svg";
-        emit = faviconConfig?.emitAssets !== undefined ? faviconConfig?.emitAssets : true;
-
-        updateConfig({ vite: { plugins: [vitePluginFavicons(source, mergedConfig, compress)] } });
-      },
-      'astro:server:setup': async () => {},
-      'astro:build:start': async ({ logger }) => {
-        if (emit) {
-          await createFiles(source, dest, mergedConfig, logger);
+      "astro:config:setup": async ({
+        isRestart: ir,
+        command: cmd,
+        updateConfig,
+        logger,
+        addMiddleware,
+      }) => {
+        sources = getInput(opts?.input);
+        if (cmd === "build" || cmd === "dev") {
+          if (!ir) {
+            logger.info(`Processing source...`);
+          }
+          updateConfig({
+            vite: {
+              plugins: [await create(sources, opts, ir, logger)],
+            },
+          });
         }
-      }
+        addMiddleware({
+          entrypoint: `${name}/middleware`,
+          order: "pre",
+        });
+      },
     },
   };
 }

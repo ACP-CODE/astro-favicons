@@ -1,8 +1,13 @@
-# Why put the favicon pictures in the root directory?
+# Why Place Favicons in the Root Directory?
 
-When generating a favicon with `astro-favicons`, the instructions ask you to place all files at the root of your web site. You may want to place them in a sub-directory, for example in `http://example.com/assets/favicons/`, just to make things clearer. However, there are three drawbacks with this approach:
+When using `astro-favicons`, it’s recommended to place all favicon-related files in the root directory of your website. While you may prefer organizing them in a subdirectory (e.g., http://example.com/assets/favicons/), doing so comes with several limitations::
 
-- Internet Explorer looks for favicon.ico at the root of the web site. Granted: this is because we ask you to not declare favicon.ico.
-- IOS devices look for files such as apple-touch-icon-144x144.png at the root of the web site, as described by Apple. This issue can be mitigated by declaring the icons in the HTML code (this is necessary for Android anyway), but following Apple conventions is probably the best move.
-- By default, Internet Explorer 11 looks for browserconfig.xml at the root of the web site.
-- Several services, such as Yandex, look for favicon.ico in the root directory.
+1. **Internet Explorer Compatibility**: Internet Explorer expects `favicon.ico` to be located in the root directory. While you aren’t required to explicitly declare `favicon.ico`, placing it at the root ensures compatibility.
+
+2. **iOS Device Behavior**: iOS devices look for files like `apple-touch-icon-144x144.png` in the root directory, following Apple’s guidelines. While this can be addressed by declaring these icons in your HTML (necessary for Android), adhering to Apple’s conventions is generally the best approach.
+
+3. **Browserconfig.xml**: for IE11: By default, Internet Explorer 11 searches for `browserconfig.xml` in the root directory.
+
+4. **Service Compatibility**: Certain services, such as Yandex, specifically look for `favicon.ico` in the root directory.
+
+To ensure smooth compatibility across platforms and services, placing favicon files in the root directory is the simplest and most reliable solution.

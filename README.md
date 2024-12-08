@@ -1,179 +1,206 @@
-<div align="center">
+[![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
+[![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
-**Latest Updates! 🎉 See the [change log](./CHANGELOG.md) for details.**
+[Why Place Favicons in the Root Directory?]: ./WHY.md
+
+<div align="center">
+  
+<img height="128" alt="" src="./assets/logo.svg">
 
 # astro-favicons
 
-A Multi-platform (iOS13+、Android、Windows、macOS、chromeOS etc.),
-All Browser(Chrome、 Safari、Firefox、Yandex、IE、Edge ) Favicon generator for [Astro](https://astro.build/) Project.
+An all-in-one favicon and PWA assets generator for Astro projects, <br>
+supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (Chrome, Safari, Firefox, Yandex, IE, Edge).
 
-[Features](#features) · [Installation](#installation) · [Usage](#usage) · [Configuration](#configuration) · [Change Log](/CHANGELOG.md)
+With `capo.js` rules, it ensures proper `<head>` ordering, supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
 
 </div>
 
-## Key Features
-
-- Generates and inserts standard-compliant favicon link tags.
-- Automatically creates favicon assets for different environments using one source file.
-- Simplify or optimize communication between teams to avoid missing files.
-- Change Favicon for Light and Dark Mode.
-
 ## Installation
 
-> This package is compatible with ***Astro 4.0.0*** and above, which support the Integrations API.
+Quickly install with the `astro add` command: (>=4.0.0)
 
-```sh
-npm install astro-favicons
+```shell
+npx astro add astro-favicons
 ```
 
-## Usage
+If you run into issues, try with [Manual Setup](#1-install-and-configure) guide.
 
-<details>
+## Documentation
 
-<summary>Adding the configuration for Integration.</summary>
+<details><summary>✨ Manual Setup</summary>
 
-To use this integration, add it to your `astro.config.*` file using the integrations property:
+### 1. Install and Configure
+
+- **Step 1**: To install manually, run:
+
+  ```shell
+  npm install astro-svgs
+  ```
+
+- **Step 2**: Add the integration to your Astro config file (`astro.config.*`):
 
 ```ts
-// astro.config.mjs
+// @ts-check
 import { defineConfig } from "astro/config";
-import favicons from "astro-favicons"; // Add code manually
+import favicons from "astro-favicons";
 
 export default defineConfig({
-  compressHTML: import.meta.env.PROD,
-
-  integrations: [
-    favicons({
-      // masterPicture: "./src/favicon.svg",
-      // emitAssets: true,
-
-      // You should adjust the following options accordingly
-      appName: "",
-      appShortName: "",
-      appDescription: "",
-      // dir:"auto",
-      lang: "en-US",
-      // display: "standalone",
-      // orientation: "any",
-      // start_url: "/?homescreen=1",
-      background: "#fff",
-      theme_color: "#fff",
-
-      faviconsDarkMode: false, // default `true`, Make favicon compatible with light and dark modes
-      
-      // appleStatusBarStyle: "black-translucent",
-
-      //....
-    }),
-  ],
+  integrations: [favicons()],
 });
 ```
 
-</details>
+- **Step 3**: Place the `favicon.svg` file in the `public` folder:
+
+  ```plaintext
+  /
+  ├── public/
+  │   └── favicon.svg
+  ├── src/
+  │   └── pages/
+  │       └── index.astro
+  └── astro.config.mjs
+  ```
+
+### 2. Development
+
+Start the server with `npm run dev`, You can access the all generated assets, such as `http://localhost:4321/manifest.webmanifest`.
+
+By default, `astro-favicons` will insert 20 HTML tags into all pages, including the `default404` page:
 
 <details>
-
-<summary>Generate favicons from masterPicture. </summary>
-
-1. Provide a `favicon.svg` image in the `src` directory.
-
-2. Run `npm run dev` or `npm run build` in terminal.<br>
-   Following HTML Code will **automatically insert** in the `head` section of all pages.
+<summary><b>Automatically Injected HTML Tags (Localized Support)</b></summary>
 
 ```html
-<!-- Astro Favicons v1.1.0 - https://github.com/ACP-CODE/astro-favicons -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico" media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"  media="(prefers-color-scheme: light)">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48-dark.png"  media="(prefers-color-scheme: dark)">
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#fff">
-<meta name="application-name" content="Welcome to Astro Favicons.">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Astro Favicons">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff">
-<meta name="msapplication-TileColor" content="#fff">
-<meta name="msapplication-config" content="/browserconfig.xml">
-<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json">
-<!--  Astro Favicons -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+<meta name="application-name" content="Astro Favicons" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"/>
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Astro Favicons" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="msapplication-TileColor" content="#fff" />
+<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+<meta name="msapplication-config" content="/browserconfig.xml" />
+<link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json" />
 ```
-
-> If [compressHTML](https://docs.astro.build/en/reference/configuration-reference/#compresshtml) default, it will be compressed
-
-3. Emit or not emit assets by `emitAssets` options.
-
-```sh
-npm run build
-```
-
-```sh
-/
-├── public/
-│   ├── android-chrome-192x192.png
-│   ├── android-chrome-512x512.png
-│   ├── apple-touch-icon.png
-│   ├── browserconfig.xml
-│   ├── favicon-16x16.png
-│   ├── favicon-16x16-dark.png
-│   ├── favicon-32x32.png
-│   ├── favicon-32x32-dark.png
-│   ├── favicon-48x48.png
-│   ├── favicon-48x48-dark.png
-│   ├── favicon.ico
-│   ├── favicon-dark.ico
-│   ├── favicon.svg
-│   ├── manifest.webmanifest
-│   ├── mstile-150x150.png
-│   ├── safari-pinned-tab.svg
-│   ├── yandex-browser-50x50.png
-│   └── yandex-browser-manifest.json
-├── src/
-│   └── faicon.svg
-└── package.json
-```
-
-> The default output is a total of **18 files**, which will reach **66 files** in full configuration
 
 </details>
 
-## Configuration
+> - **`Localized`** (requires `name_localized` configuration).
+> - **`Capo.js`** rule is enabled by default. If you don't want `<head>` tags to be ordered automatically, you can disable it by setting the relevant option to `false`.
 
-### Base Options
+### 3. Build
 
-This is the underlying API of the plugin `masterPicture` and `emitAssets`
+Build the project by running `npm run build`. By default, 3 files and 16 images will be built through `emitFile` of vite.
+
+<details><summary><b>Build Output: 19 Files</b></summary>
+
+```shell
+17:57:14 [vite] dist/yandex-browser-manifest.json       0.15 kB │ gzip: 0.13 kB
+17:57:14 [vite] dist/browserconfig.xml                  0.37 kB │ gzip: 0.19 kB
+17:57:14 [vite] dist/favicon-16x16.png                  0.38 kB
+17:57:14 [vite] dist/manifest.webmanifest               0.56 kB
+17:57:14 [vite] dist/favicon-32x32.png                  0.77 kB
+17:57:14 [vite] dist/favicon-48x48.png                  1.17 kB
+17:57:14 [vite] dist/safari-pinned-tab.svg              1.24 kB │ gzip: 0.57 kB
+17:57:14 [vite] dist/favicon.svg                        1.24 kB │ gzip: 0.57 kB
+17:57:14 [vite] dist/yandex-browser-50x50.png           1.24 kB
+17:57:14 [vite] dist/mstile-70x70.png                   1.76 kB
+17:57:14 [vite] dist/mstile-144x144.png                 3.84 kB
+17:57:14 [vite] dist/mstile-150x150.png                 3.96 kB
+17:57:14 [vite] dist/mstile-310x150.png                 4.26 kB
+17:57:14 [vite] dist/apple-touch-icon.png               4.97 kB
+17:57:14 [vite] dist/apple-touch-icon-precomposed.png   4.97 kB
+17:57:14 [vite] dist/android-chrome-192x192.png         5.00 kB
+17:57:14 [vite] dist/mstile-310x310.png                 8.40 kB
+17:57:14 [vite] dist/android-chrome-512x512.png        14.99 kB
+17:57:14 [vite] dist/favicon.ico                       33.31 kB
+```
+
+</details>
+
+> * The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
+> * [Why Place Favicons in the Root Directory?]
+
+To generate additional resources, refer to the following configuration. This will output more than 71 assets (3 files, 68 images) and 65 HTML tags during the build process:
 
 ```ts
+// @ts-check
+import { defineConfig } from "astro/config";
+import pwaset from "@pwaset/astro";
+import { readFile } from "fs/promises";
+
 export default defineConfig({
+  i18n: {
+    defaultLocale: "zh-CN",
+    locales: ["zh-CN", "en", "ar"],
+  },
   integrations: [
     favicons({
-      masterPicture: "./src/favicon.svg",
-      emitAssets: true,
-      faviconsDarkMode: true,
+      input: {
+        favicons: ["public/favicon.svg", await readFile("src/assets/pixel.png")], // select best source image by its size
+        // Add other platform-specific sources if needed.
+      },
+      name: "twitter",
+      name_localized: {
+        "zh-CN": "推特",
+        ar: {
+          value: "ضحك على نحو نصف مكبوت",
+          dir: "rtl",
+          lang: "ar",
+        },
+      },
+      short_name: "x",
+      manifest: {},
+      icons: {
+        favicons: true,
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        windows: true,
+        yandex: true,
+      },
+      pixel_art: true,
+      manifestMaskable: false,
+      shortcuts: {},
+      screenshots: {},
+      output: {
+        images: true,
+        files: true,
+        html: true,
+        assetPrefix: "/"
+      },
+      capo: true,
+      // Extra options...
     }),
   ],
 });
 ```
 
-### Core Options
+> It may look complex, but with with enhanced **JSDoc** support, you'll master it quickly.
 
-Since FaviconConfig extends FaviconOptions, please refer to [favicons](https://www.npmjs.com/package/favicons) or JSDOc of favicons-lib for other available interfaces.
+</details>
 
-> **Difference：** I simply added the `Safari` platform on top of favcions to support `safari-pinned-tab.svg` generation and tag logging.
+For advanced features and detailed usage, please refer to the [documentation]()
 
-Future upgrades of the core may be spent more on the favicons-lib library
+## Support and Feedback
 
-## Need Help or Feedback?
-
-Submit your issues or feedback on our [GitHub](https://github.com/ACP-CODE/astro-favicons/issues) channel.
+Submit your issues or feedback on our [GitHub](https://github.com/withpwa/astro/issues) channel.
 
 ## Changelog
 
-Check out the [CHANGELOG.md](CHANGELOG.md) file for a history of changes to this integration.
+For the full changelog, see the [Releases](https://github.com/ACP-CODE/astro-favicons/releases/) page.
+
+## License
+
+MIT

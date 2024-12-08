@@ -1,7 +1,7 @@
 {
   "name": "astro-favicons",
-  "version": "2.1.8",
-  "description": "A Multi-platform, All Browser Favicon generator for Astro Project.",
+  "version": "3.0.0",
+  "description": "An all-in-one favicon and PWA assets generator for Astro projects. It automates the creation of favicons, manifest, and supports hot reloading for efficient development. Powered by Capo.js rules, it keeps your ﹤𝚑𝚎𝚊𝚍﹥ content well-organized and tidy.",
   "type": "module",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -10,33 +10,42 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
+    },
+    "./middleware": {
+      "types": "./dist/middleware.d.ts",
+      "import": "./dist/middleware.mjs"
     }
   },
   "files": [
-    "dist/index.d.ts",
-    "dist/index.mjs"
+    "dist/*.d.ts",
+    "dist/*.mjs"
   ],
+  "scripts": {
+    "fmt": "prettier --write .",
+    "build": "unbuild",
+    "prepublishOnly": "npm run build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ACP-CODE/astro-favicons.git"
   },
-  "scripts": {
-    "build": "unbuild",
-    "prepublishOnly": "npm run build"
-  },
   "keywords": [
+    "astro",
     "astro-integration",
-    "favicon.ico",
     "favicons",
-    "favicons generator",
-    "Android",
-    "Apple Icon",
-    "Apple Startup",
-    "Windows Tile",
-    "PWA",
+    "web-manifest",
+    "apple-icons",
+    "apple-startup",
+    "Capo.js",
+    "pwa",
     "manifest.webmanifest",
+    "browserconfig.xml",
     "yandex-browser-manifest.json",
-    "browserconfig.xml"
+    "android",
+    "android-chrome",
+    "windows",
+    "windows-tile",
+    "yandex"
   ],
   "author": "Junlin",
   "license": "MIT",
@@ -44,15 +53,16 @@
     "url": "https://github.com/ACP-CODE/astro-favicons/issues"
   },
   "homepage": "https://github.com/ACP-CODE/astro-favicons#readme",
+  "dependencies": {
+    "favilib": "^1.0.0"
+  },
   "devDependencies": {
-    "@types/node": "^22.7.9",
-    "astro": "^4.16.7",
+    "@types/node": "^22.10.1",
+    "astro": "4.14.0",
+    "prettier": "^3.3.3",
     "unbuild": "^2.0.0"
   },
   "peerDependencies": {
-    "astro": "^4.0.0"
-  },
-  "dependencies": {
-    "favicons-lib": "^7.2.2"
+    "astro": ">= 4.0.0"
   }
 }
