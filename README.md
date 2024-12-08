@@ -181,7 +181,7 @@ export default defineConfig({
         assetPrefix: "/"
       },
       capo: true,
-      // ......
+      // Extra options...
     }),
   ],
 });
