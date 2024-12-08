@@ -1,4 +1,4 @@
-import favicons from "favicons";
+import favicons from "favilib";
 import type {
   InputSource,
   FaviconResponse,

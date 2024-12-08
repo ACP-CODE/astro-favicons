@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/ACP-CODE/astro-favicons#readme",
   "dependencies": {
-    "favicons": "../../libraries/favicons"
+    "favilib": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

@@ -1,4 +1,4 @@
-import type { PlatformName } from "favicons";
+import type { PlatformName } from "favilib";
 
 export type {
   FaviconOptions,
@@ -7,7 +7,7 @@ export type {
   FaviconResponse,
   FaviconFile,
   FaviconImage,
-} from "favicons";
+} from "favilib";
 
 export type Source = string | Buffer | (string | Buffer)[];
 export type InputSource = Record<PlatformName, Source>;
