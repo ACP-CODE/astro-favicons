@@ -1,6 +1,8 @@
 [![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
 [![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
+[Why Place Favicons in the Root Directory?]: ./WHY.md
+
 <div align="center">
   
 <img height="128" alt="" src="./assets/logo.svg">
@@ -67,7 +69,7 @@ Start the server with `npm run dev`, You can access the all generated assets, su
 By default, `astro-favicons` will insert 20 HTML tags into all pages, including the `default404` page:
 
 <details>
-<summary>20 HTML Tags</summary>
+<summary><b>Automatically Inserted HTML Tags (Localized Support)</b></summary>
 
 ```html
 <link rel="manifest" href="/manifest.webmanifest" />
@@ -101,6 +103,8 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 
 Build the project by running `npm run build`. By default, 3 files and 16 images will be built through `emitFile` of vite.
 
+<details><summary><b>Build Output: 19 Files</b></summary>
+
 ```shell
 17:57:14 [vite] dist/yandex-browser-manifest.json       0.15 kB │ gzip: 0.13 kB
 17:57:14 [vite] dist/browserconfig.xml                  0.37 kB │ gzip: 0.19 kB
@@ -119,12 +123,14 @@ Build the project by running `npm run build`. By default, 3 files and 16 images 
 17:57:14 [vite] dist/apple-touch-icon-precomposed.png   4.97 kB
 17:57:14 [vite] dist/android-chrome-192x192.png         5.00 kB
 17:57:14 [vite] dist/mstile-310x310.png                 8.40 kB
-17:57:14 [vite] dist/_app/sprite.4e5ea5e2.svg          10.83 kB │ gzip: 4.15 kB
 17:57:14 [vite] dist/android-chrome-512x512.png        14.99 kB
 17:57:14 [vite] dist/favicon.ico                       33.31 kB
 ```
 
-> The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
+</details>
+
+> * The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
+> * [Why Place Favicons in the Root Directory?]
 
 To generate additional resources, refer to the following configuration. This will output more than 71 assets (3 files, 68 images) and 65 HTML tags during the build process:
 
@@ -142,12 +148,8 @@ export default defineConfig({
   integrations: [
     favicons({
       input: {
-        favicons: [
-          "public/favicon.svg",
-          await readFile("src/assets/pixel.png"),
-        ], // select best source image by its size
-        // ...
-        // MoreOptions: Specify sources for other platforms as needed.
+        favicons: ["public/favicon.svg", await readFile("src/assets/pixel.png")], // select best source image by its size
+        // Add other platform-specific sources if needed.
       },
       name: "twitter",
       name_localized: {
@@ -178,9 +180,8 @@ export default defineConfig({
         html: true,
         assetPrefix: "/"
       }
-      //...
-      // MoreOptions: Other options unrelated to resource generation.
       capo: true,
+      // ......
     }),
   ],
 });
