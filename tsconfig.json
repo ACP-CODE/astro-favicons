@@ -1,3 +1,10 @@
 {
-  "extends": "astro/tsconfigs/base"
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "virtual:astro-favicons": ["typings/virtual.d.ts"]
+    }
+  },
+  "include": ["src/**/*"]
 }

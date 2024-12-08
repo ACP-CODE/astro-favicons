@@ -5,15 +5,15 @@ export const defaults: Options = {
   short_name: "Favicons",
   icons: {
     android: [
-      "android-chrome-192x192.png", 
+      "android-chrome-192x192.png",
       {
         name: "android-chrome-512x512.png",
-        sizes: [{width: 512, height: 512}],
+        sizes: [{ width: 512, height: 512 }],
         purpose: "maskable",
         transparent: true,
         rotate: false,
         offset: 13,
-      }
+      },
     ],
     appleIcon: [
       "apple-touch-icon.png",
