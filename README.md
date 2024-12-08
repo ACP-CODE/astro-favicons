@@ -179,7 +179,7 @@ export default defineConfig({
         files: true,
         html: true,
         assetPrefix: "/"
-      }
+      },
       capo: true,
       // ......
     }),
