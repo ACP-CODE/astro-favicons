@@ -25,7 +25,10 @@ export async function create(
   //
   logger.info(
     `${data.files.length} file(s), ${data.images.length} image(s)` +
-      $s(`${!isRestart ? " \u2713 Completed in" : ''} ${formatTime(processedTime)}.`, [`${!isRestart ? "FgGreen": "Dim"}`]),
+      $s(
+        `${!isRestart ? " \u2713 Completed in" : ""} ${formatTime(processedTime)}.`,
+        [`${!isRestart ? "FgGreen" : "Dim"}`],
+      ),
   );
 
   return {

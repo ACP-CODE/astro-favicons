@@ -7,7 +7,7 @@
 
 # astro-favicons
 
-An all-in-one favicons and PWA assets generator for Astro projects, <br>
+An all-in-one favicon and PWA assets generator for Astro projects, <br>
 supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (Chrome, Safari, Firefox, Yandex, IE, Edge).
 
 With `capo.js` rules, it ensures proper `<head>` ordering, supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
@@ -26,8 +26,7 @@ If you run into issues, try with [Manual Setup](#1-install-and-configure) guide.
 
 ## Documentation
 
-<details>
-<summary>✨ Manual Setup</summary>
+<details><summary>✨ Manual Setup</summary>
 
 ### 1. Install and Configure
 
@@ -63,9 +62,12 @@ export default defineConfig({
 
 ### 2. Development
 
-Start the server with `npm run dev`, You can access the generated assets, such as `http://localhost:4321/manifest.webmanifest`.
+Start the server with `npm run dev`, You can access the all generated assets, such as `http://localhost:4321/manifest.webmanifest`.
 
 By default, `astro-favicons` will insert 20 HTML tags into all pages, including the `default404` page:
+
+<details>
+<summary>20 HTML Tags</summary>
 
 ```html
 <link rel="manifest" href="/manifest.webmanifest" />
@@ -74,17 +76,10 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
 <meta name="application-name" content="Astro Favicons" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="/apple-touch-icon-precomposed.png"
-/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"/>
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta
-  name="apple-mobile-web-app-status-bar-style"
-  content="black-translucent"
-/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Astro Favicons" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -96,6 +91,8 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 <meta name="msapplication-config" content="/browserconfig.xml" />
 <link rel="yandex-tableau-widget" href="/yandex-browser-manifest.json" />
 ```
+
+</details>
 
 > - **`Localized`** (requires `name_localized` configuration).
 > - **`Capo.js`** rule is enabled by default. If you don't want `<head>` tags to be ordered automatically, you can disable it by setting the relevant option to `false`.
@@ -179,7 +176,7 @@ export default defineConfig({
         images: true,
         files: true,
         html: true,
-        assetPrefix: "http://localhost:4321/assets/favcions/"
+        assetPrefix: "/"
       }
       //...
       // MoreOptions: Other options unrelated to resource generation.

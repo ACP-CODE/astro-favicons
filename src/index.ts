@@ -40,7 +40,7 @@ export default function createIntegration(options?: Options): AstroIntegration {
         addMiddleware,
       }) => {
         sources = getInput(opts?.input);
-        if (cmd==='build' || cmd==='dev') {
+        if (cmd === "build" || cmd === "dev") {
           if (!ir) {
             logger.info(`Processing source...`);
           }
