@@ -12,7 +12,7 @@ export const defaults: Options = {
         purpose: "maskable",
         transparent: true,
         rotate: false,
-        offset: 0,
+        offset: 13,
       }
     ],
     appleIcon: [
