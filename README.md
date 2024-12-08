@@ -69,7 +69,7 @@ Start the server with `npm run dev`, You can access the all generated assets, su
 By default, `astro-favicons` will insert 20 HTML tags into all pages, including the `default404` page:
 
 <details>
-<summary><b>Automatically Inserted HTML Tags (Localized Support)</b></summary>
+<summary><b>Automatically Injected HTML Tags (Localized Support)</b></summary>
 
 ```html
 <link rel="manifest" href="/manifest.webmanifest" />
