@@ -9,17 +9,16 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./src/index.ts"
+      "import": "./dist/index.mjs"
     },
     "./middleware": {
-      "import": "./src/middleware/index.js"
+      "types": "./dist/middleware.d.ts",
+      "import": "./dist/middleware.mjs"
     }
   },
   "files": [
-    "dist/index.d.ts",
-    "dist/index.mjs",
-    "dist/middleware.d.ts",
-    "dist/middleware.mjs"
+    "dist/*.d.ts",
+    "dist/*.mjs"
   ],
   "scripts": {
     "fmt": "prettier --write .",
