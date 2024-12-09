@@ -1,17 +1,11 @@
-/**
- * @author Junlin
- * @license MIT
- *
- * Custom middleware for localized app name handling
- */
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
 import capo from "./capo";
 
 const getLocalizedName = (locale: string) => {
-  const localized = opts.name_localized?.[locale];
-  if (!localized) return opts.name; // If not defined, returns the default value
-  return typeof localized === "string" ? localized : localized.value;
+  const n_loc = opts.name_localized?.[locale];
+  if (!n_loc) return opts.name;
+  return typeof n_loc === "string" ? n_loc : n_loc.value;
 };
 
 export const withCapo = defineMiddleware(async (context, next) => {
