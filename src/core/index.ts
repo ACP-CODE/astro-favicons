@@ -8,11 +8,17 @@ import type {
   Options,
 } from "../types";
 
-async function buildIcons(
+type Params = {
+  options: Options;
+  platform: PlatformName;
+};
+
+async function handleIcons(
   input: Source,
-  options: Options,
-  platform: PlatformName,
+  params: Params,
 ): Promise<FaviconResponse> {
+  const { options, platform } = params;
+
   const iconOptions = Object.fromEntries(
     Object.entries(options.icons).map(([key, value]) => [
       key,
@@ -53,7 +59,7 @@ export async function collect(
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await buildIcons(input?.[platform], options, platform),
+      response: await handleIcons(input?.[platform], { options, platform }),
     })),
   );
   return mergeResults(results);
