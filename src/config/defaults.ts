@@ -1,5 +1,6 @@
-import type { Options } from "..";
+import type { Options, Source } from "../types";
 
+export const defaultSource: Source = "public/favicon.svg";
 export const defaults: Options = {
   name: null,
   short_name: null,
