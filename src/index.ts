@@ -1,8 +1,7 @@
 import type { AstroIntegration } from "astro";
-import type { FaviconOptions, Input, InputSource } from "./types";
+import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
-import { getInput } from "./helpers";
-import { create } from "./plugin";
+import { handleAssets } from "./plugin";
 
 export const name = "astro-favicons";
 export interface Options extends FaviconOptions {
@@ -13,7 +12,7 @@ export interface Options extends FaviconOptions {
    * @example
    * ```js
    * input: {
-   *  yandex: ["public/favicon.svg", readFile("src/favicons/pixel.png")]
+   *  yandex: ["public/favicon.svg", await readFile("path/to/pixel.png")]
    * }
    * ```
    */
@@ -26,27 +25,25 @@ export interface Options extends FaviconOptions {
 }
 
 export default function createIntegration(options?: Options): AstroIntegration {
-  let sources: InputSource;
   const opts = { ...defaults, ...options };
 
   return {
     name,
     hooks: {
       "astro:config:setup": async ({
-        isRestart: ir,
+        isRestart,
         command: cmd,
         updateConfig,
         logger,
         addMiddleware,
       }) => {
-        sources = getInput(opts?.input);
         if (cmd === "build" || cmd === "dev") {
-          if (!ir) {
+          if (!isRestart) {
             logger.info(`Processing source...`);
           }
           updateConfig({
             vite: {
-              plugins: [await create(sources, opts, ir, logger)],
+              plugins: [await handleAssets(opts, { isRestart, logger })],
             },
           });
         }

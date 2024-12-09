@@ -4,14 +4,21 @@ import type {
   FaviconResponse,
   Source,
   PlatformName,
+  NamedIconOptions,
+  Options,
 } from "../types";
-import type { Options } from "..";
 
-async function generateIcons(
+type Params = {
+  options: Options;
+  platform: PlatformName;
+};
+
+async function handleIcons(
   input: Source,
-  options: Options,
-  platform: PlatformName,
+  params: Params,
 ): Promise<FaviconResponse> {
+  const { options, platform } = params;
+
   const iconOptions = Object.fromEntries(
     Object.entries(options.icons).map(([key, value]) => [
       key,
@@ -21,12 +28,14 @@ async function generateIcons(
 
   return await favicons(input, {
     ...options,
-    // @ts-ignore
-    icons: iconOptions,
+    icons: iconOptions as Record<
+      PlatformName,
+      boolean | (string | NamedIconOptions)[]
+    >,
   });
 }
 
-function mergeResponses(
+function mergeResults(
   results: { platform: PlatformName; response: FaviconResponse }[],
 ): FaviconResponse {
   return results.reduce(
@@ -42,7 +51,7 @@ function mergeResponses(
   );
 }
 
-export async function processing(
+export async function collect(
   input: InputSource,
   options: Options,
 ): Promise<FaviconResponse> {
@@ -50,8 +59,8 @@ export async function processing(
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await generateIcons(input?.[platform], options, platform),
+      response: await handleIcons(input?.[platform], { platform, options }),
     })),
   );
-  return mergeResponses(results);
+  return mergeResults(results);
 }

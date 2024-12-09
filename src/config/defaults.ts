@@ -1,19 +1,20 @@
-import type { Options } from "..";
+import type { Options, Source } from "../types";
 
+export const defaultSource: Source = "public/favicon.svg";
 export const defaults: Options = {
-  name: "Astro Favicons",
-  short_name: "Favicons",
+  name: null,
+  short_name: null,
   icons: {
     android: [
-      "android-chrome-192x192.png", 
+      "android-chrome-192x192.png",
       {
         name: "android-chrome-512x512.png",
-        sizes: [{width: 512, height: 512}],
+        sizes: [{ width: 512, height: 512 }],
         purpose: "maskable",
         transparent: true,
         rotate: false,
         offset: 13,
-      }
+      },
     ],
     appleIcon: [
       "apple-touch-icon.png",

@@ -1,7 +1,7 @@
 {
   "name": "astro-favicons",
-  "version": "3.0.0",
-  "description": "An all-in-one favicon and PWA assets generator for Astro projects. It automates the creation of favicons, manifest, and supports hot reloading for efficient development. Powered by Capo.js rules, it keeps your ﹤𝚑𝚎𝚊𝚍﹥ content well-organized and tidy.",
+  "version": "3.0.1",
+  "description": "An all-in-one favicon and PWA assets generator for Astro projects. It automates the creation of favicons, manifest, and supports hot reloading for efficient development. Powered by `astro-capo`, it keeps your ﹤𝚑𝚎𝚊𝚍﹥ content well-organized and tidy.",
   "type": "module",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -13,7 +13,7 @@
     },
     "./middleware": {
       "types": "./dist/middleware.d.ts",
-      "import": "./dist/middleware.mjs"
+      "import": "./dist/middleware.d.ts"
     }
   },
   "files": [
@@ -54,7 +54,8 @@
   },
   "homepage": "https://github.com/ACP-CODE/astro-favicons#readme",
   "dependencies": {
-    "favilib": "^1.0.0"
+    "favilib": "^1.0.0",
+    "ultrahtml": "^1.5.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",

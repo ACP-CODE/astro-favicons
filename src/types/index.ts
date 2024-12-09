@@ -9,6 +9,7 @@ export type {
   FaviconImage,
 } from "favilib";
 
+export type { Options } from "..";
 export type Source = string | Buffer | (string | Buffer)[];
 export type InputSource = Record<PlatformName, Source>;
 export type Input = Source | Partial<InputSource>;

@@ -1,27 +1,31 @@
-import type { AstroConfig, AstroIntegrationLogger } from "astro";
+import type { AstroIntegrationLogger } from "astro";
 import type { Plugin } from "vite";
 import { name, type Options } from ".";
-import type { InputSource } from "./types";
-import { processing } from "./core";
-import { normalizePath, mime } from "./helpers";
+import { collect } from "./core";
+import { getInput, normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
 import { styler as $s } from "./utils/styler";
 
-export async function create(
-  source: InputSource,
-  opts: Options,
-  isRestart: boolean,
-  logger: AstroIntegrationLogger,
-): Promise<Plugin> {
-  let base = normalizePath(opts.output?.assetsPrefix);
+type Params = {
+  isRestart: boolean;
+  logger: AstroIntegrationLogger;
+};
 
+export async function handleAssets(
+  opts: Options,
+  params: Params,
+): Promise<Plugin> {
   const virtualModuleId = `virtual:${name}`;
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
 
+  let sources = getInput(opts);
+
   const startAt = performance.now();
-  const data = await processing(source, opts);
+  const data = await collect(sources, opts);
   const processedTime = performance.now() - startAt;
 
+  const { isRestart, logger } = params;
+  let base = normalizePath(opts.output?.assetsPrefix);
   //
   logger.info(
     `${data.files.length} file(s), ${data.images.length} image(s)` +
@@ -34,18 +38,18 @@ export async function create(
   return {
     name,
     enforce: "pre",
-    async resolveId(id) {
+    resolveId(id) {
       if (id === virtualModuleId) {
         return resolvedVirtualModuleId;
       }
     },
-    async load(id) {
+    load(id) {
       if (id === resolvedVirtualModuleId) {
         return `export const html = ${JSON.stringify(data.html)}; export const opts = ${JSON.stringify(opts)}`;
       }
     },
 
-    async configureServer(server) {
+    configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         try {
           const reqUrl = decodeURIComponent(req.url || ""); // 解码整个路径
@@ -64,15 +68,15 @@ export async function create(
           }
 
           next(); // 未找到资源时，继续下一个中间件
-        } catch (error) {
-          console.error("Error in middleware:", error);
+        } catch (err) {
+          console.error("Error in middleware:", err);
           res.statusCode = 500;
           res.end("Internal Server Error");
         }
       });
     },
 
-    async generateBundle() {
+    generateBundle() {
       try {
         const emitFile = (resource: {
           name: string;
@@ -87,8 +91,8 @@ export async function create(
 
         data.images.forEach((image) => emitFile(image));
         data.files.forEach((file) => emitFile(file));
-      } catch (error) {
-        throw error;
+      } catch (err) {
+        throw err;
       }
     },
   };

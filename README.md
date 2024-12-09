@@ -1,4 +1,4 @@
-[![Release](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
+[![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
 [![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
 [Why Place Favicons in the Root Directory?]: ./WHY.md

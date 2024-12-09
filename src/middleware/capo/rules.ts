@@ -2,7 +2,7 @@
  * @author Nate Moore
  * @license [Apache](src/middleware/capo/LICENSE)
  * Adapted from https://github.com/rviscomi/capo.js/blob/a4d8902d300bc5207b3b588984a3b5e67bdc38b1/src/lib/rules.js
- * Further modified by Nate Moore for the astro-capo project.
+ * Further modified by Nate Moore for the `astro-capo` project.
  *
  * Original code by Rick Viscomi.
  */
