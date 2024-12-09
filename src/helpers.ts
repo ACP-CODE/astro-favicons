@@ -1,16 +1,13 @@
-import type { InputSource, PlatformName, Source, Input } from "./types";
 import path from "path";
+import type { InputSource, PlatformName, Source, Input } from "./types";
 
 function isSource(value: any): value is Source {
-  if (typeof value === "string" || Buffer.isBuffer(value)) {
-    return true;
-  }
-  if (Array.isArray(value)) {
-    return value.every(
-      (item) => typeof item === "string" || Buffer.isBuffer(item),
-    );
-  }
-  return false;
+  return (
+    typeof value === "string" ||
+    Buffer.isBuffer(value) ||
+    (Array.isArray(value) &&
+      value.every((item) => typeof item === "string" || Buffer.isBuffer(item)))
+  );
 }
 
 export function getInput(input: Input): InputSource {
@@ -25,27 +22,34 @@ export function getInput(input: Input): InputSource {
     yandex: defaultSource,
   };
 
+  // 如果 input 为空，直接返回 defaults
   if (!input) {
     return defaults;
   }
 
+  // 如果 input 是单一 Source 类型，返回一个包含所有默认值的对象
   if (isSource(input)) {
     return Object.fromEntries(
       Object.keys(defaults).map((key) => [key, input]),
     ) as InputSource;
   }
 
-  // 组合已定义的值
-  const unionSource: Source[] = Object.entries(input)
+  // 合并已定义的值
+  const unionSource: Source = Object.entries(input)
     .filter(([_, value]) => value !== undefined) // 过滤掉未定义的值
-    .flatMap(([_, value]) => value); // 将剩余的值合并为数组
+    .map(([_, value]) => value) // 获取有效值
+    .flat(); // 展平为一个数组，合并所有非 undefined 的值
 
   // 创建结果对象并确保未定义的键使用 unionSource
   const result: InputSource = {} as InputSource;
 
   for (const key of Object.keys(defaults) as Array<PlatformName>) {
-    // @ts-expect-error
-    result[key] = input[key] !== undefined ? input[key]! : unionSource;
+    result[key] =
+      input[key] !== undefined
+        ? input[key]!
+        : unionSource.length === 1
+          ? unionSource[0]
+          : unionSource; // 如果 unionSource 长度为1，使用单个值
   }
 
   return result;
