@@ -22,7 +22,7 @@ export function getInput(input: Input): InputSource {
     yandex: defaultSource,
   };
 
-  // 如果 input 为空，直接返回 defaults
+  // 如果 input 为空，直接返回 icons
   if (!input) {
     return icons;
   }
