@@ -135,7 +135,7 @@ To generate additional resources, refer to the following configuration. This wil
 ```ts
 // @ts-check
 import { defineConfig } from "astro/config";
-import pwaset from "@pwaset/astro";
+import favicons from "favicons";
 import { readFile } from "fs/promises";
 
 export default defineConfig({
