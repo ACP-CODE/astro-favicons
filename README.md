@@ -10,7 +10,7 @@
 An all-in-one favicon and PWA assets generator for Astro projects, <br>
 supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (Chrome, Safari, Firefox, Yandex, IE, Edge).
 
-Supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
+Supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development.
 
 </div>
 
