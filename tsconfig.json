@@ -3,8 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "virtual:astro-favicons": ["typings/virtual.d.ts"]
+      "virtual:astro-favicons": ["src/types/virtual.d.ts"]
     }
   },
-  "include": ["src/**/*"]
 }
