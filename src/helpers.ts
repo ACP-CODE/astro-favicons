@@ -1,5 +1,6 @@
 import path from "path";
 import type { InputSource, PlatformName, Source, Input } from "./types";
+import { defaultSource as defaults } from "./config/defaults";
 
 function isSource(value: any): value is Source {
   return (
@@ -11,15 +12,13 @@ function isSource(value: any): value is Source {
 }
 
 export function getInput(input: Input): InputSource {
-  const defaultSource: Source = "public/favicon.svg";
-
   const icons: InputSource = {
-    favicons: defaultSource,
-    android: defaultSource,
-    appleIcon: defaultSource,
-    appleStartup: defaultSource,
-    windows: defaultSource,
-    yandex: defaultSource,
+    favicons: defaults,
+    android: defaults,
+    appleIcon: defaults,
+    appleStartup: defaults,
+    windows: defaults,
+    yandex: defaults,
   };
 
   // 如果 input 为空，直接返回 icons
