@@ -12,12 +12,12 @@ function isSource(value: any): value is Source {
   );
 }
 
-export function getInput(opts?: Options): InputSource {
+export function getInput(opts?: Pick<Options, "input" | "icons">): InputSource {
   let input = opts?.input;
 
   // 如果 input 为 undefined，(所有平台) 使用默认值
   const icons = Object.fromEntries(
-    Object.keys(opts?.icons || {}).map((key) => [key, defaultSource])
+    Object.keys(opts?.icons || {}).map((key) => [key, defaultSource]),
   ) as InputSource;
 
   // 如果 input 为空，直接返回 icons
