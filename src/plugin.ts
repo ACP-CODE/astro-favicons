@@ -3,15 +3,18 @@ import type { Plugin } from "vite";
 import { name, type Options } from ".";
 import type { InputSource } from "./types";
 import { processing } from "./core";
-import { normalizePath, mime } from "./helpers";
+import { getInput, normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
 import { styler as $s } from "./utils/styler";
 
+type Params = {
+  isRestart: boolean;
+  logger: AstroIntegrationLogger;
+};
+
 export async function synthAssets(
-  source: InputSource,
   opts: Options,
-  isRestart: boolean,
-  logger: AstroIntegrationLogger,
+  params: Params,
 ): Promise<Plugin> {
   let base = normalizePath(opts.output?.assetsPrefix);
 
@@ -19,9 +22,10 @@ export async function synthAssets(
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
 
   const startAt = performance.now();
-  const data = await processing(source, opts);
+  const data = await processing(getInput(opts?.input), opts);
   const processedTime = performance.now() - startAt;
 
+  const { isRestart, logger } = params;
   //
   logger.info(
     `${data.files.length} file(s), ${data.images.length} image(s)` +
