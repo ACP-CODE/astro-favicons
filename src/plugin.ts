@@ -66,8 +66,8 @@ export async function synthAssets(
           }
 
           next(); // 未找到资源时，继续下一个中间件
-        } catch (error) {
-          console.error("Error in middleware:", error);
+        } catch (err) {
+          console.error("Error in middleware:", err);
           res.statusCode = 500;
           res.end("Internal Server Error");
         }
@@ -89,8 +89,8 @@ export async function synthAssets(
 
         data.images.forEach((image) => emitFile(image));
         data.files.forEach((file) => emitFile(file));
-      } catch (error) {
-        throw error;
+      } catch (err) {
+        throw err;
       }
     },
   };
