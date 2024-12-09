@@ -1,5 +1,5 @@
 import type { AstroIntegration } from "astro";
-import type { FaviconOptions, Input, InputSource } from "./types";
+import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
 import { synthAssets } from "./plugin";
 
