@@ -1,7 +1,7 @@
 import type { AstroIntegration } from "astro";
 import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
-import { synthAssets } from "./plugin";
+import { handleAssets } from "./plugin";
 
 export const name = "astro-favicons";
 export interface Options extends FaviconOptions {
@@ -43,7 +43,7 @@ export default function createIntegration(options?: Options): AstroIntegration {
           }
           updateConfig({
             vite: {
-              plugins: [await synthAssets(opts, { isRestart, logger })],
+              plugins: [await handleAssets(opts, { isRestart, logger })],
             },
           });
         }
