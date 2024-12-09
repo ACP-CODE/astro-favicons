@@ -3,9 +3,9 @@ import { defineMiddleware, sequence } from "astro/middleware";
 import capo from "./capo";
 
 const getLocalizedName = (locale: string) => {
-  const n_loc = opts.name_localized?.[locale];
-  if (!n_loc) return opts.name;
-  return typeof n_loc === "string" ? n_loc : n_loc.value;
+  const localized = opts.name_localized?.[locale];
+  if (!localized) return opts.name;
+  return typeof localized === "string" ? localized : localized.value;
 };
 
 export const withCapo = defineMiddleware(async (context, next) => {
