@@ -40,7 +40,7 @@ export function getInput(input: Input): InputSource {
       Object.entries(input)
         .filter(([_, value]) => value !== undefined) // 过滤掉未定义的值
         .map(([_, value]) => value) // 获取有效值
-        .flat()
+        .flat(),
     ),
   ];
 
