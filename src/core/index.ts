@@ -5,8 +5,8 @@ import type {
   Source,
   PlatformName,
   NamedIconOptions,
+  Options,
 } from "../types";
-import type { Options } from "..";
 
 async function buildIcons(
   input: Source,
