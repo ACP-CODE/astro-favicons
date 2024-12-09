@@ -1,8 +1,6 @@
 [![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
 [![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
-[Why Place Favicons in the Root Directory?]: ./WHY.md
-
 <div align="center">
   
 <img height="128" alt="" src="./assets/logo.svg">
@@ -12,7 +10,7 @@
 An all-in-one favicon and PWA assets generator for Astro projects, <br>
 supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (Chrome, Safari, Firefox, Yandex, IE, Edge).
 
-With `capo.js` rules, it ensures proper `<head>` ordering, supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
+Supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development."
 
 </div>
 
@@ -130,7 +128,7 @@ Build the project by running `npm run build`. By default, 3 files and 16 images 
 </details>
 
 > * The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
-> * [Why Place Favicons in the Root Directory?]
+> * [Why Place Favicons in the Root Directory?](./WHY.md)
 
 To generate additional resources, refer to the following configuration. This will output more than 71 assets (3 files, 68 images) and 65 HTML tags during the build process:
 
