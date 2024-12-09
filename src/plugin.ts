@@ -18,8 +18,10 @@ export async function handleAssets(
   const virtualModuleId = `virtual:${name}`;
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
 
+  let sources = getInput(opts);
+
   const startAt = performance.now();
-  const data = await collect(getInput(opts?.input), opts);
+  const data = await collect(sources, opts);
   const processedTime = performance.now() - startAt;
 
   const { isRestart, logger } = params;
