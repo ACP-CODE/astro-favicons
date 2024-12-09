@@ -7,7 +7,7 @@ import { normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
 import { styler as $s } from "./utils/styler";
 
-export async function create(
+export async function synthAssets(
   source: InputSource,
   opts: Options,
   isRestart: boolean,
