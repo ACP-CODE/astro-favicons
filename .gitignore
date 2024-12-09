@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# package
+*.tgz
+
 # dependencies
 node_modules/
 
