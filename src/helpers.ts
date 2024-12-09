@@ -1,5 +1,5 @@
 import path from "path";
-import type { InputSource, PlatformName, Source, Input } from "./types";
+import type { InputSource, PlatformName, Source } from "./types";
 import { defaultSource } from "./config/defaults";
 import type { Options } from "./types";
 
