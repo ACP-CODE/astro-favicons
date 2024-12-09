@@ -1,4 +1,4 @@
-import type { AstroConfig, AstroIntegrationLogger } from "astro";
+import type { AstroIntegrationLogger } from "astro";
 import type { Plugin } from "vite";
 import { name, type Options } from ".";
 import { collect } from "./core";
