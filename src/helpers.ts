@@ -1,6 +1,7 @@
 import path from "path";
 import type { InputSource, PlatformName, Source, Input } from "./types";
-import { defaultSource as defaults } from "./config/defaults";
+import { defaultSource } from "./config/defaults";
+import type { Options } from "./types";
 
 function isSource(value: any): value is Source {
   return (
@@ -11,15 +12,12 @@ function isSource(value: any): value is Source {
   );
 }
 
-export function getInput(input: Input): InputSource {
-  const icons: InputSource = {
-    favicons: defaults,
-    android: defaults,
-    appleIcon: defaults,
-    appleStartup: defaults,
-    windows: defaults,
-    yandex: defaults,
-  };
+export function getInput(opts?: Options): InputSource {
+  let input = opts?.input;
+
+  const icons = Object.fromEntries(
+    Object.keys(opts?.icons || {}).map((key) => [key, defaultSource])
+  ) as InputSource;
 
   // 如果 input 为空，直接返回 icons
   if (!input) {
