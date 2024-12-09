@@ -59,7 +59,7 @@ export async function collect(
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await handleIcons(input?.[platform], { options, platform }),
+      response: await handleIcons(input?.[platform], { platform, options }),
     })),
   );
   return mergeResults(results);
