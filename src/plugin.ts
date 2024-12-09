@@ -1,7 +1,7 @@
 import type { AstroConfig, AstroIntegrationLogger } from "astro";
 import type { Plugin } from "vite";
 import { name, type Options } from ".";
-import { processing } from "./core";
+import { collect } from "./core";
 import { getInput, normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
 import { styler as $s } from "./utils/styler";
@@ -11,7 +11,7 @@ type Params = {
   logger: AstroIntegrationLogger;
 };
 
-export async function synthAssets(
+export async function handleAssets(
   opts: Options,
   params: Params,
 ): Promise<Plugin> {
@@ -19,7 +19,7 @@ export async function synthAssets(
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
 
   const startAt = performance.now();
-  const data = await processing(getInput(opts?.input), opts);
+  const data = await collect(getInput(opts?.input), opts);
   const processedTime = performance.now() - startAt;
 
   const { isRestart, logger } = params;
@@ -36,18 +36,18 @@ export async function synthAssets(
   return {
     name,
     enforce: "pre",
-    async resolveId(id) {
+    resolveId(id) {
       if (id === virtualModuleId) {
         return resolvedVirtualModuleId;
       }
     },
-    async load(id) {
+    load(id) {
       if (id === resolvedVirtualModuleId) {
         return `export const html = ${JSON.stringify(data.html)}; export const opts = ${JSON.stringify(opts)}`;
       }
     },
 
-    async configureServer(server) {
+    configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         try {
           const reqUrl = decodeURIComponent(req.url || ""); // 解码整个路径
@@ -74,7 +74,7 @@ export async function synthAssets(
       });
     },
 
-    async generateBundle() {
+    generateBundle() {
       try {
         const emitFile = (resource: {
           name: string;
