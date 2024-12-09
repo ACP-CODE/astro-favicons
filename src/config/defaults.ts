@@ -1,8 +1,8 @@
 import type { Options } from "..";
 
 export const defaults: Options = {
-  name: "Astro Favicons",
-  short_name: "Favicons",
+  name: null,
+  short_name: null,
   icons: {
     android: [
       "android-chrome-192x192.png",
