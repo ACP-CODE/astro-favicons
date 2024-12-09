@@ -12,7 +12,7 @@ export interface Options extends FaviconOptions {
    * @example
    * ```js
    * input: {
-   *  yandex: ["public/favicon.svg", readFile("src/favicons/pixel.png")]
+   *  yandex: ["public/favicon.svg", await readFile("path/to/pixel.png")]
    * }
    * ```
    */
@@ -43,9 +43,7 @@ export default function createIntegration(options?: Options): AstroIntegration {
           }
           updateConfig({
             vite: {
-              plugins: [
-                await synthAssets(opts, { isRestart, logger }),
-              ],
+              plugins: [await synthAssets(opts, { isRestart, logger })],
             },
           });
         }
