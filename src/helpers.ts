@@ -13,7 +13,7 @@ function isSource(value: any): value is Source {
 export function getInput(input: Input): InputSource {
   const defaultSource: Source = "public/favicon.svg";
 
-  const defaults: InputSource = {
+  const icons: InputSource = {
     favicons: defaultSource,
     android: defaultSource,
     appleIcon: defaultSource,
@@ -24,13 +24,13 @@ export function getInput(input: Input): InputSource {
 
   // 如果 input 为空，直接返回 defaults
   if (!input) {
-    return defaults;
+    return icons;
   }
 
   // 如果 input 是单一 Source 类型，返回一个包含所有默认值的对象
   if (isSource(input)) {
     return Object.fromEntries(
-      Object.keys(defaults).map((key) => [key, input]),
+      Object.keys(icons).map((key) => [key, input]),
     ) as InputSource;
   }
 
@@ -47,7 +47,7 @@ export function getInput(input: Input): InputSource {
   // 创建结果对象并确保未定义的键使用 unionSource
   const result: InputSource = {} as InputSource;
 
-  for (const key of Object.keys(defaults) as Array<PlatformName>) {
+  for (const key of Object.keys(icons) as Array<PlatformName>) {
     result[key] =
       input[key] !== undefined
         ? input[key]!
