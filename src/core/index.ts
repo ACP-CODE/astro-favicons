@@ -4,6 +4,7 @@ import type {
   FaviconResponse,
   Source,
   PlatformName,
+  NamedIconOptions,
 } from "../types";
 import type { Options } from "..";
 
@@ -21,8 +22,10 @@ async function generateIcons(
 
   return await favicons(input, {
     ...options,
-    // @ts-ignore
-    icons: iconOptions,
+    icons: iconOptions as Record<
+      PlatformName,
+      boolean | (string | NamedIconOptions)[]
+    >,
   });
 }
 
