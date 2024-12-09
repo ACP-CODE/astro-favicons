@@ -35,10 +35,14 @@ export function getInput(input: Input): InputSource {
   }
 
   // 合并已定义的值
-  const unionSource: Source = Object.entries(input)
-    .filter(([_, value]) => value !== undefined) // 过滤掉未定义的值
-    .map(([_, value]) => value) // 获取有效值
-    .flat(); // 展平为一个数组，合并所有非 undefined 的值
+  const unionSource: Source = [
+    ...new Set(
+      Object.entries(input)
+        .filter(([_, value]) => value !== undefined) // 过滤掉未定义的值
+        .map(([_, value]) => value) // 获取有效值
+        .flat()
+    ),
+  ];
 
   // 创建结果对象并确保未定义的键使用 unionSource
   const result: InputSource = {} as InputSource;
