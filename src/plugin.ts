@@ -1,7 +1,6 @@
 import type { AstroConfig, AstroIntegrationLogger } from "astro";
 import type { Plugin } from "vite";
 import { name, type Options } from ".";
-import type { InputSource } from "./types";
 import { processing } from "./core";
 import { getInput, normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
@@ -16,8 +15,6 @@ export async function synthAssets(
   opts: Options,
   params: Params,
 ): Promise<Plugin> {
-  let base = normalizePath(opts.output?.assetsPrefix);
-
   const virtualModuleId = `virtual:${name}`;
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
 
@@ -26,6 +23,7 @@ export async function synthAssets(
   const processedTime = performance.now() - startAt;
 
   const { isRestart, logger } = params;
+  let base = normalizePath(opts.output?.assetsPrefix);
   //
   logger.info(
     `${data.files.length} file(s), ${data.images.length} image(s)` +
