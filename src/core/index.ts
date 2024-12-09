@@ -8,7 +8,7 @@ import type {
 } from "../types";
 import type { Options } from "..";
 
-async function generateIcons(
+async function buildIcons(
   input: Source,
   options: Options,
   platform: PlatformName,
@@ -29,7 +29,7 @@ async function generateIcons(
   });
 }
 
-function mergeResponses(
+function mergeResults(
   results: { platform: PlatformName; response: FaviconResponse }[],
 ): FaviconResponse {
   return results.reduce(
@@ -45,7 +45,7 @@ function mergeResponses(
   );
 }
 
-export async function processing(
+export async function collect(
   input: InputSource,
   options: Options,
 ): Promise<FaviconResponse> {
@@ -53,8 +53,8 @@ export async function processing(
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await generateIcons(input?.[platform], options, platform),
+      response: await buildIcons(input?.[platform], options, platform),
     })),
   );
-  return mergeResponses(results);
+  return mergeResults(results);
 }
