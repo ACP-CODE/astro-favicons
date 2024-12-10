@@ -1,6 +1,12 @@
 [![Build Status](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml/badge.svg?style=flat-square)](https://github.com/ACP-CODE/astro-favicons/actions/workflows/ci.yaml)
 [![NPM Version](https://img.shields.io/npm/v/astro-favicons)](https://www.npmjs.com/package/astro-favicons)
 
+[W3C]: https://www.w3.org/TR/appmanifest/#x_localized-members
+[JSDoc]: ./dist/index.d.ts
+[documentation]: ./dist/index.d.ts
+[Github]: https://github.com/withpwa/astro/issues
+[Release]: https://github.com/ACP-CODE/astro-favicons/releases/
+
 <div align="center">
   
 <img height="128" alt="" src="./assets/logo.svg">
@@ -10,7 +16,7 @@
 An all-in-one favicon and PWA assets generator for Astro projects, <br>
 supporting iOS 13+, Android, Windows, macOS, chromeOS, and all major browsers (Chrome, Safari, Firefox, Yandex, IE, Edge).
 
-Supports localized app names, and integrates a dynamic [W3C](https://www.w3.org/TR/appmanifest/#x_localized-members) manifest, and supports hot reloading for efficient development.
+Supports localized app names, and integrates a dynamic [W3C] appmanifest, and supports hot reloading for efficient development.
 
 </div>
 
@@ -76,10 +82,17 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
 <meta name="application-name" content="Astro Favicons" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-precomposed.png"/>
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/apple-touch-icon-precomposed.png"
+/>
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#fff" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+/>
 <meta name="apple-mobile-web-app-title" content="Astro Favicons" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -127,8 +140,8 @@ Build the project by running `npm run build`. By default, 3 files and 16 images 
 
 </details>
 
-> * The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
-> * [Why Place Favicons in the Root Directory?](./WHY.md)
+> - The output directory is determined by the `output.assetsPrefix` option in the integration configuration.
+> - [Why Place Favicons in the Root Directory?](./WHY.md)
 
 To generate additional resources, refer to the following configuration. This will output more than 71 assets (3 files, 68 images) and 65 HTML tags during the build process:
 
@@ -146,7 +159,10 @@ export default defineConfig({
   integrations: [
     favicons({
       input: {
-        favicons: ["public/favicon.svg", await readFile("src/assets/pixel.png")], // select best source image by its size
+        favicons: [
+          "public/favicon.svg",
+          await readFile("src/assets/pixel.png"),
+        ], // select best source image by its size
         // Add other platform-specific sources if needed.
       },
       name: "twitter",
@@ -176,7 +192,7 @@ export default defineConfig({
         images: true,
         files: true,
         html: true,
-        assetPrefix: "/"
+        assetPrefix: "/",
       },
       capo: true,
       // Extra options...
@@ -185,19 +201,19 @@ export default defineConfig({
 });
 ```
 
-> It may look complex, but with with enhanced **JSDoc** support, you'll master it quickly.
+> It may look complex, but with with enhanced **[JSDoc]** support, you'll master it quickly.
 
 </details>
 
-For advanced features and detailed usage, please refer to the [documentation]()
+For advanced features and detailed usage, please refer to the [documentation]
 
 ## Support and Feedback
 
-Submit your issues or feedback on our [GitHub](https://github.com/withpwa/astro/issues) channel.
+Submit your issues or feedback on our [GitHub] channel.
 
 ## Changelog
 
-For the full changelog, see the [Releases](https://github.com/ACP-CODE/astro-favicons/releases/) page.
+For the full changelog, see the [Releases] page.
 
 ## License
 

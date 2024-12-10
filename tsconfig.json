@@ -5,5 +5,5 @@
     "paths": {
       "virtual:astro-favicons": ["src/types/virtual.d.ts"]
     }
-  },
+  }
 }
