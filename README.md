@@ -5,7 +5,7 @@
 [JSDoc]: ./dist/index.d.ts
 [documentation]: ./dist/index.d.ts
 [Github]: https://github.com/withpwa/astro/issues
-[Release]: https://github.com/ACP-CODE/astro-favicons/releases/
+[Releases]: https://github.com/ACP-CODE/astro-favicons/releases/
 
 <div align="center">
   
