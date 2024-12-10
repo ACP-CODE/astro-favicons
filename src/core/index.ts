@@ -8,27 +8,39 @@ import type {
   Options,
 } from "../types";
 
-type Params = {
-  options: Options;
-  platform: PlatformName;
+type Platformed<T> = T & { platform: PlatformName };
+
+type PlatformedResponse = {
+  readonly images: Platformed<FaviconResponse["images"][number]>[];
+  readonly files: Platformed<FaviconResponse["files"][number]>[];
+  readonly html: FaviconResponse["html"];
 };
 
-async function handleIcons(
+// type PlatformedResponse = {
+//   [K in keyof FaviconResponse]: Platformed<FaviconResponse[K][number]>[];
+// };
+
+type Params = {
+  platform: PlatformName;
+  options: Options;
+};
+
+async function getIconsForPlatform(
   input: Source,
   params: Params,
 ): Promise<FaviconResponse> {
   const { options, platform } = params;
 
-  const iconOptions = Object.fromEntries(
+  const offOptions = Object.fromEntries(
     Object.entries(options.icons).map(([key, value]) => [
       key,
-      key === platform ? value : false,
+      key === platform ? value : false, // 将其他平台设置为 false
     ]),
   );
 
   return await favicons(input, {
     ...options,
-    icons: iconOptions as Record<
+    icons: offOptions as Record<
       PlatformName,
       boolean | (string | NamedIconOptions)[]
     >,
@@ -37,7 +49,7 @@ async function handleIcons(
 
 function mergeResults(
   results: { platform: PlatformName; response: FaviconResponse }[],
-): FaviconResponse {
+): PlatformedResponse {
   return results.reduce(
     (acc, { platform, response }) => {
       acc.images.push(
@@ -47,19 +59,19 @@ function mergeResults(
       acc.html.push(...response.html);
       return acc;
     },
-    { images: [], files: [], html: [] } as FaviconResponse,
+    { images: [], files: [], html: [] } as PlatformedResponse,
   );
 }
 
 export async function collect(
   input: InputSource,
   options: Options,
-): Promise<FaviconResponse> {
+): Promise<PlatformedResponse> {
   const platforms = Object.keys(options.icons) as PlatformName[];
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await handleIcons(input?.[platform], { platform, options }),
+      response: await getIconsForPlatform(input?.[platform], { platform, options }),
     })),
   );
   return mergeResults(results);

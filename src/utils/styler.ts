@@ -30,18 +30,11 @@
 
 const Styles = {
   Reset: "\x1b[0m",
-  Bright: "\x1b[1m",
   Dim: "\x1b[2m",
-  Underscore: "\x1b[4m",
-  ResetBoldDim: "\x1b[22m",
 
-  FgBlack: "\x1b[30m",
   FgGreen: "\x1b[32m",
   FgYellow: "\x1b[33m",
   FgBlue: "\x1b[34m",
-
-  BgGreen: "\x1b[42m",
-  BgBlue: "\x1b[44m",
 };
 
 type Style = keyof typeof Styles;

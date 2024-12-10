@@ -74,8 +74,11 @@ export function mime(fileName: string): string {
 
   const contentTypes: Record<string, string> = {
     ico: "image/x-icon",
-    png: "image/png",
     svg: "image/svg+xml",
+    png: "image/png",
+    webp: "image/webp",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
     json: "application/json",
     xml: "application/xml",
     webmanifest: "application/manifest+json",

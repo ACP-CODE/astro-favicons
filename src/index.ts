@@ -6,7 +6,6 @@ import { handleAssets } from "./plugin";
 export const name = "astro-favicons";
 export interface Options extends FaviconOptions {
   /**
-   * @description
    * Specify the source image(s) used to generate platform-specific assets.
    * @default `public/favicon.svg`.
    * @example
