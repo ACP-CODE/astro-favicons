@@ -39,7 +39,7 @@ If you run into issues, try with [Manual Setup](#1-install-and-configure) guide.
 - **Step 1**: To install manually, run:
 
   ```shell
-  npm install astro-svgs
+  npm install astro-favicons
   ```
 
 - **Step 2**: Add the integration to your Astro config file (`astro.config.*`):
