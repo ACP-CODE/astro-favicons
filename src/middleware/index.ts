@@ -8,10 +8,10 @@ import {
 } from "ultrahtml";
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
-import { name, version } from "..";
+import { name, version, homepage } from "../config/packge";
 import capo from "./capo";
 
-const banner = `Made by \`${name}\` v${version} - https://github.com/ACP-CODE/${name}.git`;
+const banner = `Made by \`${name}\` v${version} - ${homepage}`;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
@@ -38,7 +38,7 @@ export const localizedHTML = (locale?: string) => {
 
 function injectToHead(ast: ElementNode, locale?: string): boolean {
   let hasInjected = false;
-  
+
   walkSync(ast, (node) => {
     if (node.type === ELEMENT_NODE && node.name === "head") {
       const alreadyInjected = node.children.some(

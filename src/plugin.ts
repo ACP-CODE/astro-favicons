@@ -1,6 +1,7 @@
 import type { AstroIntegrationLogger } from "astro";
 import type { Plugin, ResolvedConfig } from "vite";
-import { name, type Options } from ".";
+import type { Options } from ".";
+import { name } from "./config/packge";
 import { fetch } from "./core";
 import { getInput, normalizePath, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
