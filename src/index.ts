@@ -2,7 +2,7 @@ import type { AstroIntegration } from "astro";
 import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
 import { handleAssets } from "./plugin";
-import { name } from "../package.json";
+import { name } from "./config/packge";
 
 export interface Options extends FaviconOptions {
   /**
