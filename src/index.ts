@@ -17,10 +17,10 @@ export interface Options extends FaviconOptions {
    */
   input?: Input;
   /**
-   * Get the ﹤𝚑𝚎𝚊𝚍﹥ in order
-   * @default true
+   * Powered by `astro-capo`, it keeps the `<head>` content well-organized and tidy.
+   * @default config.compressHTML `true`
    */
-  capo?: boolean;
+  withCapo?: boolean;
 }
 
 export default function createIntegration(options?: Options): AstroIntegration {
@@ -37,7 +37,7 @@ export default function createIntegration(options?: Options): AstroIntegration {
         logger,
         addMiddleware,
       }) => {
-        opts.capo = opts.capo ?? config.compressHTML;
+        opts.withCapo = opts.withCapo ?? config.compressHTML;
         if (cmd === "build" || cmd === "dev") {
           if (!isRestart) {
             logger.info(`Processing source...`);
