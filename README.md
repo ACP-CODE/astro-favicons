@@ -116,7 +116,7 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 
 Added in: `v3.1.0`
 
-> 
+>
 
 </summary>
 
