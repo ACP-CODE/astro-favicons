@@ -26,5 +26,4 @@ export const defaults: Options = {
     windows: true,
     yandex: true,
   },
-  capo: true,
 };

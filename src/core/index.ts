@@ -22,7 +22,8 @@ type PlatformedResponse = {
 
 type Params = {
   platform: PlatformName;
-  options: Options;
+  options?: Options;
+  response?: FaviconResponse;
 };
 
 async function getIconsForPlatform(
@@ -47,23 +48,19 @@ async function getIconsForPlatform(
   });
 }
 
-function mergeResults(
-  results: { platform: PlatformName; response: FaviconResponse }[],
-): PlatformedResponse {
+function mergeResults(results: Params[]): PlatformedResponse {
   return results.reduce(
-    (acc, { platform, response }) => {
-      acc.images.push(
-        ...response.images.map((image) => ({ ...image, platform })),
-      );
-      acc.files.push(...response.files.map((file) => ({ ...file, platform })));
-      acc.html.push(...response.html);
+    (acc, { platform, response: res }) => {
+      acc.images.push(...res.images.map((image) => ({ ...image, platform })));
+      acc.files.push(...res.files.map((file) => ({ ...file, platform })));
+      acc.html.push(...res.html);
       return acc;
     },
     { images: [], files: [], html: [] } as PlatformedResponse,
   );
 }
 
-export async function collect(
+export async function fetch(
   input: InputSource,
   options: Options,
 ): Promise<PlatformedResponse> {
@@ -71,7 +68,10 @@ export async function collect(
   const results = await Promise.all(
     platforms.map(async (platform) => ({
       platform,
-      response: await getIconsForPlatform(input?.[platform], { platform, options }),
+      response: await getIconsForPlatform(input?.[platform], {
+        platform,
+        options,
+      }),
     })),
   );
   return mergeResults(results);

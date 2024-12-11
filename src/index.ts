@@ -2,8 +2,8 @@ import type { AstroIntegration } from "astro";
 import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
 import { handleAssets } from "./plugin";
+import { name } from "./config/packge";
 
-export const name = "astro-favicons";
 export interface Options extends FaviconOptions {
   /**
    * Specify the source image(s) used to generate platform-specific assets.
@@ -17,10 +17,10 @@ export interface Options extends FaviconOptions {
    */
   input?: Input;
   /**
-   * Get the ﹤𝚑𝚎𝚊𝚍﹥ in order
-   * @default true
+   * Powered by `astro-capo`, it keeps the `<head>` content well-organized and tidy.
+   * @default config.compressHTML `true`
    */
-  capo?: boolean;
+  withCapo?: boolean;
 }
 
 export default function createIntegration(options?: Options): AstroIntegration {
@@ -30,12 +30,14 @@ export default function createIntegration(options?: Options): AstroIntegration {
     name,
     hooks: {
       "astro:config:setup": async ({
+        config,
         isRestart,
         command: cmd,
         updateConfig,
         logger,
         addMiddleware,
       }) => {
+        opts.withCapo = opts.withCapo ?? config.compressHTML;
         if (cmd === "build" || cmd === "dev") {
           if (!isRestart) {
             logger.info(`Processing source...`);
