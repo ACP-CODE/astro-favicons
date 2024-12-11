@@ -178,7 +178,7 @@ export default defineConfig({
     defaultLocale: "zh-CN",
     locales: ["zh-CN", "en", "ar"],
   },
-  compressHTML: true,
+  compressHTML: import.meta.env.PROD,
   integrations: [
     favicons({
       input: {
@@ -217,7 +217,6 @@ export default defineConfig({
         html: true,
         assetPrefix: "/",
       },
-      withCapo: false,
       // Extra options...
     }),
   ],
