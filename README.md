@@ -108,7 +108,27 @@ By default, `astro-favicons` will insert 20 HTML tags into all pages, including 
 </details>
 
 > - **`Localized`** (requires `name_localized` configuration).
-> - **`Capo.js`** rule is enabled by default. If you don't want `<head>` tags to be ordered automatically, you can disable it by setting the relevant option to `false`.
+> - **`withCapo`** is defaults to `true` (based on `AstroConfig.compressHTML`). To prevent automatic reordering and tidying of ` <head>` tags, set the relevant option or `compressHTML` to `false`.
+
+<details>
+<summary>
+<b> Manual Import of HTML Tags Now Supported</b>
+
+Added in: `v3.1.0`
+
+</summary>
+
+e.g `~/components/Meta.astro`
+
+```ts
+---
+import { localizedHTML as favicons } from 'astro-favicons/middleware';
+---
+<meta charset="utf-8" />
+<Fragment set:html={favicons(Astro.currentLocale)} />
+```
+
+</details>
 
 ### 3. Build
 
@@ -156,6 +176,7 @@ export default defineConfig({
     defaultLocale: "zh-CN",
     locales: ["zh-CN", "en", "ar"],
   },
+  compressHTML: true,
   integrations: [
     favicons({
       input: {
@@ -194,7 +215,7 @@ export default defineConfig({
         html: true,
         assetPrefix: "/",
       },
-      capo: true,
+      withCapo: false,
       // Extra options...
     }),
   ],
