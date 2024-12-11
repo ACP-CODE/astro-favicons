@@ -1,2 +1,2 @@
-import { name, version, homepage } from '../../package.json';
-export { name, version, homepage }
+import { name, version, homepage } from "../../package.json";
+export { name, version, homepage };
