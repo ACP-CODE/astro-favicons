@@ -8,10 +8,10 @@ import {
 } from "ultrahtml";
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
-import { name } from "..";
+import { name, version } from "..";
 import capo from "./capo";
 
-const banner = `${html.length} Tag(s) made by ${name}`;
+const banner = `Made by \`${name}\` v${version} - https://github.com/ACP-CODE/${name}.git`;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
@@ -23,7 +23,7 @@ const useLocaleName = (locale?: string) => {
     : opts.name;
 };
 
-export const useLocaleHTML = (locale?: string) => {
+export const localizedHTML = (locale?: string) => {
   const tags = html
     .map((line) =>
       line.replace(
@@ -33,18 +33,18 @@ export const useLocaleHTML = (locale?: string) => {
     )
     .join("\n");
 
-  return `<!--${banner}-->\n${tags}\n<!--/${banner}-->`;
+  return `<!--${banner}-->${tags}<!--/Total ${html.length} tag(s)-->`;
 };
 
 function injectToHead(ast: ElementNode, locale?: string): boolean {
   let hasInjected = false;
-  const injectedHTML = useLocaleHTML(locale);
-
+  
   walkSync(ast, (node) => {
     if (node.type === ELEMENT_NODE && node.name === "head") {
       const alreadyInjected = node.children.some(
         (child) => child.type === COMMENT_NODE && child.value.trim() === banner,
       );
+      const injectedHTML = localizedHTML(locale);
       if (!alreadyInjected) {
         const injectedNodes = parse(injectedHTML).children;
         node.children.push(...injectedNodes); // 直接插入为子节点
@@ -55,7 +55,7 @@ function injectToHead(ast: ElementNode, locale?: string): boolean {
   return hasInjected;
 }
 
-export const withCapo = defineMiddleware(async (context, next) => {
+export const withCapo = defineMiddleware(async (ctx, next) => {
   const res = await next();
   if (!res.headers.get("Content-Type").includes("text/html")) {
     return next();
@@ -64,11 +64,11 @@ export const withCapo = defineMiddleware(async (context, next) => {
   const doc = await res.text();
   const ast = parse(doc);
 
-  injectToHead(ast, context.currentLocale);
+  injectToHead(ast, ctx.currentLocale);
 
   const document = renderSync(ast);
 
-  return new Response(opts.capo ? capo(document) : document, {
+  return new Response(opts.withCapo ? capo(document) : document, {
     status: res.status,
     headers: res.headers,
   });
