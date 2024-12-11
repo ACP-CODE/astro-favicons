@@ -9,11 +9,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./src/index.ts"
     },
     "./middleware": {
       "types": "./dist/middleware.d.ts",
-      "import": "./dist/middleware.mjs"
+      "import": "./src/middleware/index.ts"
     }
   },
   "files": [

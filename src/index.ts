@@ -30,12 +30,14 @@ export default function createIntegration(options?: Options): AstroIntegration {
     name,
     hooks: {
       "astro:config:setup": async ({
+        config,
         isRestart,
         command: cmd,
         updateConfig,
         logger,
         addMiddleware,
       }) => {
+        opts.capo = opts.capo ?? config.compressHTML;
         if (cmd === "build" || cmd === "dev") {
           if (!isRestart) {
             logger.info(`Processing source...`);
