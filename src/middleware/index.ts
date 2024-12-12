@@ -11,7 +11,7 @@ import { defineMiddleware, sequence } from "astro/middleware";
 import { formatedName, version, homepage } from "../config/packge";
 import capo from "./capo";
 
-const banner = ` Made by ${formatedName} v${version} - ${homepage} `;
+const flag = ` Made by ${formatedName} v${version} - ${homepage} `;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
@@ -23,17 +23,37 @@ const useLocaleName = (locale?: string) => {
     : opts.name;
 };
 
-export const localizedHTML = (locale?: string) => {
-  const tags = html
-    .map((line) =>
-      line.replace(
-        /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/,
-        `name="$2" content="${useLocaleName(locale)}"`,
-      ),
-    )
-    .join("\n");
+// export const localizedHTML = (locale?: string) => {
+//   if (html.length === 0) return;
+//   const tags = html
+//     .map((line) =>
+//       line.replace(
+//         /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/,
+//         `name="$2" content="${useLocaleName(locale)}"`,
+//       ),
+//     )
+//     .join("\n");
 
-  return `<!--${banner}-->${tags}<!--/ ${formatedName} - ${html.length} tag(s) -->`;
+//   return `<!--${flag}-->\n${tags}<!--/ ${formatedName} (${html.length} tags) -->`;
+// };
+
+export const localizedHTML = (locale?: string) => {
+  if (html.length === 0) return;
+  const ast = parse(
+    `<!--${flag}-->\n${html.join("\n")}<!--/ ${formatedName} (${html.length} tags) -->`,
+  );
+
+  walkSync(ast, (node) => {
+    const meta = node.attributes;
+    if (
+      node.type === ELEMENT_NODE &&
+      (meta.name === "application-name" ||
+        meta.name === "apple-mobile-web-app-title")
+    ) {
+      meta.content = useLocaleName(locale);
+    }
+  });
+  return renderSync(ast);
 };
 
 function injectToHead(ast: ElementNode, locale?: string): boolean {
@@ -42,7 +62,7 @@ function injectToHead(ast: ElementNode, locale?: string): boolean {
   walkSync(ast, (node) => {
     if (node.type === ELEMENT_NODE && node.name === "head") {
       const alreadyInjected = node.children.some(
-        (child) => child.type === COMMENT_NODE && child.value === banner,
+        (child) => child.type === COMMENT_NODE && child.value === flag,
       );
       const injectedHTML = localizedHTML(locale);
       if (!alreadyInjected) {
@@ -56,6 +76,8 @@ function injectToHead(ast: ElementNode, locale?: string): boolean {
 }
 
 export const withCapo = defineMiddleware(async (ctx, next) => {
+  if (html.length === 0) return next();
+
   const res = await next();
   if (!res.headers.get("Content-Type").includes("text/html")) {
     return next();
