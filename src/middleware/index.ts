@@ -46,7 +46,7 @@ export const localizedHTML = (locale?: string) => {
   walkSync(ast, (node) => {
     const meta = node.attributes;
     if (
-      node.type === ELEMENT_NODE &&
+      node.type === ELEMENT_NODE && node.name === "meta" &&
       (meta.name === "application-name" ||
         meta.name === "apple-mobile-web-app-title")
     ) {
