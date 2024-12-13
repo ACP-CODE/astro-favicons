@@ -16,7 +16,6 @@ const useLocaleName = (locale?: string) => {
 };
 
 export const localizedHTML = (locale?: string) => {
-  if (html.length === 0) return;
   const tags = html
     .map((line) =>
       line.replace(
