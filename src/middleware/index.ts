@@ -4,6 +4,8 @@ import { formatedName, version, homepage } from "../config/packge";
 // import capo from "./capo";
 
 const flag = ` Made by ${formatedName} v${version} - ${homepage} `;
+const namePattern =
+  /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
@@ -18,10 +20,7 @@ const useLocaleName = (locale?: string) => {
 export const localizedHTML = (locale?: string) => {
   const tags = html
     .map((line) =>
-      line.replace(
-        /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/,
-        `name="$2" content="${useLocaleName(locale)}"`,
-      ),
+      line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
     )
     .join("\n");
 
@@ -35,12 +34,13 @@ export const withCapo = defineMiddleware(async (ctx, next) => {
   }
 
   const doc = await res.text();
+  
   const headIndex = doc.indexOf("</head>");
   if (headIndex === -1) return next();
 
-  const hasFlag = (doc: string) => doc.includes(flag);
+  const isInjected = doc.includes(flag);
   const locale = ctx.currentLocale;
-  const document = `${doc.slice(0, headIndex)}\n${!hasFlag(doc) ? localizedHTML(locale) : ""}${doc.slice(headIndex)}`;
+  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}${doc.slice(headIndex)}`;
 
   return new Response(document, {
     status: res.status,
