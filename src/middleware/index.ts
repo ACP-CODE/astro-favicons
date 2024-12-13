@@ -4,8 +4,6 @@ import { formatedName, version, homepage } from "../config/packge";
 // import capo from "./capo";
 
 const flag = ` Made by ${formatedName} v${version} - ${homepage} `;
-const namePattern =
-  /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
@@ -18,6 +16,9 @@ const useLocaleName = (locale?: string) => {
 };
 
 export const localizedHTML = (locale?: string) => {
+  const namePattern =
+    /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
+    
   const tags = html
     .map((line) =>
       line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
@@ -34,7 +35,7 @@ export const withCapo = defineMiddleware(async (ctx, next) => {
   }
 
   const doc = await res.text();
-  
+
   const headIndex = doc.indexOf("</head>");
   if (headIndex === -1) return next();
 
