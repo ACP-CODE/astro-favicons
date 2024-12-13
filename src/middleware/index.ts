@@ -18,7 +18,7 @@ const useLocaleName = (locale?: string) => {
 export const localizedHTML = (locale?: string) => {
   const namePattern =
     /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
-    
+
   const tags = html
     .map((line) =>
       line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
@@ -41,7 +41,7 @@ export const withCapo = defineMiddleware(async (ctx, next) => {
 
   const isInjected = doc.includes(flag);
   const locale = ctx.currentLocale;
-  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}${doc.slice(headIndex)}`;
+  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}\n${doc.slice(headIndex)}`;
 
   return new Response(document, {
     status: res.status,
