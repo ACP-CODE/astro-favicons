@@ -1,7 +1,7 @@
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
 import { formatedName, version, homepage } from "../config/packge";
-// import capo from "./capo";
+import capo from "./capo";
 
 const flag = ` Made by ${formatedName} v${version} - ${homepage} `;
 
@@ -28,7 +28,7 @@ export const localizedHTML = (locale?: string) => {
   return `<!--${flag}-->\n${tags}\n<!--/ ${formatedName} (${html.length} tags) -->`;
 };
 
-export const withCapo = defineMiddleware(async (ctx, next) => {
+const withCapo = defineMiddleware(async (ctx, next) => {
   const res = await next();
   if (!res.headers.get("Content-Type").includes("text/html")) {
     return next();
