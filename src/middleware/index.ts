@@ -39,8 +39,8 @@ export const withCapo = defineMiddleware(async (ctx, next) => {
   const headIndex = doc.indexOf("</head>");
   if (headIndex === -1) return next();
 
-  const locale = ctx.currentLocale;
   const hasFlag = (doc: string) => doc.includes(flag);
+  const locale = ctx.currentLocale;
   const document = `${doc.slice(0, headIndex)}\n${!hasFlag(doc) ? localizedHTML(locale) : ""}${doc.slice(headIndex)}`;
 
   return new Response(document, {
