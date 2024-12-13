@@ -1,3 +1,11 @@
+import type { ElementNode } from "ultrahtml";
+import {
+  parse,
+  walkSync,
+  renderSync,
+  ELEMENT_NODE,
+  COMMENT_NODE,
+} from "ultrahtml";
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
 import { formatedName, version, homepage } from "../config/packge";
@@ -16,34 +24,58 @@ const useLocaleName = (locale?: string) => {
 };
 
 export const localizedHTML = (locale?: string) => {
-  const namePattern =
-    /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
+  const ast = parse(
+    `<!--${flag}-->\n${html.join("\n")}<!--/ ${formatedName} (${html.length} tags) -->`,
+  );
 
-  const tags = html
-    .map((line) =>
-      line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
-    )
-    .join("\n");
-
-  return `<!--${flag}-->\n${tags}\n<!--/ ${formatedName} (${html.length} tags) -->`;
+  walkSync(ast, (node) => {
+    const meta = node.attributes;
+    if (
+      node.type === ELEMENT_NODE &&
+      node.type === ELEMENT_NODE &&
+      node.name === "meta" &&
+      (meta.name === "application-name" ||
+        meta.name === "apple-mobile-web-app-title")
+    ) {
+      meta.content = useLocaleName(locale);
+    }
+  });
+  return renderSync(ast);
 };
 
-const withCapo = defineMiddleware(async (ctx, next) => {
+function injectToHead(ast: ElementNode, locale?: string): boolean {
+  let hasInjected = false;
+
+  walkSync(ast, (node) => {
+    if (node.type === ELEMENT_NODE && node.name === "head") {
+      const alreadyInjected = node.children.some(
+        (child) => child.type === COMMENT_NODE && child.value.trim() === flag,
+      );
+      const injectedHTML = localizedHTML(locale);
+      if (!alreadyInjected) {
+        const injectedNodes = parse(injectedHTML).children;
+        node.children.push(...injectedNodes); // 直接插入为子节点
+        hasInjected = true;
+      }
+    }
+  });
+  return hasInjected;
+}
+
+export const withCapo = defineMiddleware(async (ctx, next) => {
   const res = await next();
   if (!res.headers.get("Content-Type").includes("text/html")) {
     return next();
   }
 
   const doc = await res.text();
+  const ast = parse(doc);
 
-  const headIndex = doc.indexOf("</head>");
-  if (headIndex === -1) return next();
+  injectToHead(ast, ctx.currentLocale);
 
-  const isInjected = doc.includes(flag);
-  const locale = ctx.currentLocale;
-  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}\n${doc.slice(headIndex)}`;
+  const document = renderSync(ast);
 
-  return new Response(document, {
+  return new Response(opts.withCapo ? capo(document) : document, {
     status: res.status,
     headers: res.headers,
   });
