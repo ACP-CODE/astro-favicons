@@ -1,11 +1,3 @@
-import type { ElementNode } from "ultrahtml";
-import {
-  parse,
-  walkSync,
-  renderSync,
-  ELEMENT_NODE,
-  COMMENT_NODE,
-} from "ultrahtml";
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
 import { formatedName, version, homepage } from "../config/packge";
@@ -24,56 +16,34 @@ const useLocaleName = (locale?: string) => {
 };
 
 export const localizedHTML = (locale?: string) => {
-  const ast = parse(
-    `<!--${flag}-->\n${html.join("\n")}<!--/ ${formatedName} (${html.length} tags) -->`,
-  );
+  const namePattern =
+    /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
 
-  walkSync(ast, (node) => {
-    const meta = node.attributes;
-    if (
-      node.type === ELEMENT_NODE &&
-      node.type === ELEMENT_NODE &&
-      node.name === "meta" &&
-      (meta.name === "application-name" ||
-        meta.name === "apple-mobile-web-app-title")
-    ) {
-      meta.content = useLocaleName(locale);
-    }
-  });
-  return renderSync(ast);
+  return html
+    .map((line) =>
+      line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
+    )
+    .join("\n");
 };
 
-function injectToHead(ast: ElementNode, locale?: string): boolean {
-  let hasInjected = false;
-
-  walkSync(ast, (node) => {
-    if (node.type === ELEMENT_NODE && node.name === "head") {
-      const alreadyInjected = node.children.some(
-        (child) => child.type === COMMENT_NODE && child.value.trim() === flag,
-      );
-      const injectedHTML = localizedHTML(locale);
-      if (!alreadyInjected) {
-        const injectedNodes = parse(injectedHTML).children;
-        node.children.push(...injectedNodes); // 直接插入为子节点
-        hasInjected = true;
-      }
-    }
-  });
-  return hasInjected;
-}
-
-export const withCapo = defineMiddleware(async (ctx, next) => {
+const withCapo = defineMiddleware(async (ctx, next) => {
+  console.log(html)
+  if (html.length === 0) return next();
+  
   const res = await next();
   if (!res.headers.get("Content-Type").includes("text/html")) {
     return next();
   }
 
   const doc = await res.text();
-  const ast = parse(doc);
 
-  injectToHead(ast, ctx.currentLocale);
+  const locale = ctx.currentLocale;
+  const favicons = localizedHTML(locale);
+  const headIndex = doc.indexOf("</head>");
+  const isInjected = doc.includes(favicons);
+  if (headIndex === -1) return next();
 
-  const document = renderSync(ast);
+  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? favicons : ""}\n${doc.slice(headIndex)}`;
 
   return new Response(opts.withCapo ? capo(document) : document, {
     status: res.status,
