@@ -1,4 +1,27 @@
-export const ElementWeights = {
+/**
+ * @author Nate Moore
+ * @license [Apache](src/middleware/capo/LICENSE)
+ * Adapted from https://github.com/rviscomi/capo.js/blob/a4d8902d300bc5207b3b588984a3b5e67bdc38b1/src/lib/rules.js
+ * Further modified by Nate Moore for the `astro-capo` project.
+ *
+ * Original code by Rick Viscomi.
+ */
+import type { ElementNode } from "ultrahtml";
+import { renderSync } from "ultrahtml";
+
+type Attributes = Record<string, string>;
+
+function has(value: unknown): value is string {
+  return typeof value === "string";
+}
+function is<T>(a: unknown, b: T): a is T {
+  return a === b;
+}
+function any(a: string | undefined, b: string[]): a is string {
+  return has(a) && b.includes(a.toLowerCase());
+}
+
+export const ElementWeights: Record<string, number> = {
   META: 10,
   TITLE: 9,
   PRECONNECT: 8,
@@ -16,12 +39,12 @@ export const ElementDetectors = {
   META: isMeta,
   TITLE: isTitle,
   PRECONNECT: isPreconnect,
+  DEFER_SCRIPT: isDeferScript,
   ASYNC_SCRIPT: isAsyncScript,
   IMPORT_STYLES: isImportStyles,
   SYNC_SCRIPT: isSyncScript,
   SYNC_STYLES: isSyncStyles,
   PRELOAD: isPreload,
-  DEFER_SCRIPT: isDeferScript,
   PREFETCH_PRERENDER: isPrefetchPrerender,
 };
 
@@ -35,97 +58,105 @@ export const META_HTTP_EQUIV_KEYWORDS = [
   "x-dns-prefetch-control",
 ];
 
-export function isMeta(element) {
-  const httpEquivSelector = META_HTTP_EQUIV_KEYWORDS.map((keyword) => {
-    return `[http-equiv="${keyword}" i]`;
-  }).join(", ");
-
-  return element.matches(
-    `meta:is([charset], ${httpEquivSelector}, [name=viewport]), base`,
+// meta:is([charset], ${httpEquivSelector}, [name=viewport]), base
+export function isMeta(name: string, a: Attributes) {
+  if (name === "base") return true;
+  if (name !== "meta") return false;
+  return (
+    has(a.charset) ||
+    is(a.name, "viewport") ||
+    any(a["http-equiv"], META_HTTP_EQUIV_KEYWORDS)
   );
 }
 
-export function isTitle(element) {
-  return element.matches("title");
+// title
+export function isTitle(name: string) {
+  return name === "title";
 }
 
-export function isPreconnect(element) {
-  return element.matches("link[rel=preconnect]");
+// link[rel=preconnect]
+export function isPreconnect(name: string, { rel }: Attributes) {
+  return name === "link" && is(rel, "preconnect");
 }
 
-export function isAsyncScript(element) {
-  return element.matches("script[src][async]");
+// script[src][async]
+export function isAsyncScript(name: string, { src, async }: Attributes) {
+  return name === "script" && has(src) && has(async);
 }
 
-export function isImportStyles(element) {
+// style that contains @import
+export function isImportStyles(name: string, a: Attributes, children: string) {
   const importRe = /@import/;
 
-  if (element.matches("style")) {
-    return importRe.test(element.textContent);
+  if (name === "style") {
+    return importRe.test(children);
   }
 
-  /* TODO: Support external stylesheets.
-  if (element.matches('link[rel=stylesheet][href]')) {
-    let response = fetch(element.href);
-    response = response.text();
-    return importRe.test(response);
-  } */
-
+  // Can't support external stylesheets on the server
   return false;
 }
 
-export function isSyncScript(element) {
-  return element.matches(
-    "script:not([src][defer],[src][type=module],[src][async],[type*=json])",
+// script:not([src][defer],[src][type=module],[src][async],[type*=json])
+export function isSyncScript(
+  name: string,
+  { src, defer, async, type = "" }: Attributes,
+) {
+  if (name !== "script") return false;
+  return !(
+    (has(src) && (has(defer) || has(async) || is(type, "module"))) ||
+    type.includes("json")
   );
 }
 
-export function isSyncStyles(element) {
-  return element.matches("link[rel=stylesheet],style");
+// link[rel=stylesheet],style
+export function isSyncStyles(name: string, { rel }: Attributes) {
+  if (name === "style") return true;
+  return name === "link" && is(rel, "stylesheet");
 }
 
-export function isPreload(element) {
-  return element.matches("link:is([rel=preload], [rel=modulepreload])");
+// link:is([rel=preload], [rel=modulepreload])
+export function isPreload(name: string, { rel }: Attributes) {
+  return name === "link" && any(rel, ["preload", "modulepreload"]);
 }
 
-export function isDeferScript(element) {
-  return element.matches(
-    "script[src][defer], script:not([src][async])[src][type=module]",
+// script[src][defer], script:not([src][async])[src][type=module]
+export function isDeferScript(
+  name: string,
+  { src, defer, async, type }: Attributes,
+) {
+  if (name !== "script") return false;
+  return (
+    (has(src) && has(defer)) || (has(src) && is(type, "module") && !has(async))
   );
 }
 
-export function isPrefetchPrerender(element) {
-  return element.matches(
-    "link:is([rel=prefetch], [rel=dns-prefetch], [rel=prerender])",
-  );
+// link:is([rel=prefetch], [rel=dns-prefetch], [rel=prerender])
+export function isPrefetchPrerender(name: string, { rel }: Attributes) {
+  return name === "link" && any(rel, ["prefetch", "dns-prefetch", "prerender"]);
 }
 
-export function isOriginTrial(element) {
-  return element.matches('meta[http-equiv="origin-trial"i]');
+// meta[http-equiv="origin-trial"i]
+export function isOriginTrial(
+  name: string,
+  { "http-equiv": http }: Attributes,
+) {
+  return name === "meta" && is(http, "origin-trial");
 }
 
-export function isMetaCSP(element) {
-  return element.matches(
-    'meta[http-equiv="Content-Security-Policy" i], meta[http-equiv="Content-Security-Policy-Report-Only" i]',
-  );
+// meta[http-equiv="Content-Security-Policy" i]
+export function isMetaCSP(name: string, { "http-equiv": http }: Attributes) {
+  return name === "meta" && is(http, "Content-Security-Policy");
 }
 
-export function getWeight(element) {
-  for (let [id, detector] of Object.entries(ElementDetectors)) {
-    if (detector(element)) {
+export function getWeight(element: ElementNode) {
+  for (const [id, detector] of Object.entries(ElementDetectors)) {
+    const children =
+      element.name === "style" && element.children.length > 0
+        ? renderSync(element)
+        : "";
+    if (detector(element.name, element.attributes, children)) {
       return ElementWeights[id];
     }
   }
-
   return ElementWeights.OTHER;
-}
-
-export function getHeadWeights(head) {
-  const headChildren = Array.from(head.children);
-  return headChildren.map((element) => {
-    return {
-      element,
-      weight: getWeight(element),
-    };
-  });
 }
