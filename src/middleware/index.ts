@@ -11,12 +11,11 @@ const useLocaleName = (locale?: string) => {
   return typeof localized === "string" ? localized : localized.value;
 };
 
-
 export const localizedHTML = (locale?: string) => {
   const namePattern =
     /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
 
-  const tags =  html
+  const tags = html
     .map((line) =>
       line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
     )
@@ -28,7 +27,7 @@ export const localizedHTML = (locale?: string) => {
 const withCapo = defineMiddleware(async (ctx, next) => {
   try {
     if (html.length === 0) throw "done";
-  
+
     const res = await next();
     if (!res.headers.get("Content-Type").includes("text/html")) {
       throw "done";
@@ -41,20 +40,17 @@ const withCapo = defineMiddleware(async (ctx, next) => {
     const isInjected = [...htmlSet].some((line) => doc.includes(line));
     if (headIndex === -1 || (!opts.withCapo && isInjected)) throw "done";
 
-    const locale = ctx.currentLocale;
-    const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}\n${doc.slice(headIndex)}`;
+    const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(ctx.currentLocale) : ""}\n${doc.slice(headIndex)}`;
 
     return new Response(opts.withCapo ? capo(document) : document, {
       status: res.status,
       headers: res.headers,
     });
-
   } catch (e) {
-    if(e === 'done') {
-      return next()
-    } else {
+    if (e !== "done") {
       console.error("Error in withCapo middleware:", e);
     }
+    return next();
   }
 });
 
