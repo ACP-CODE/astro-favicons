@@ -1,77 +1,57 @@
-import type { ElementNode } from "ultrahtml";
-import {
-  parse,
-  walkSync,
-  renderSync,
-  ELEMENT_NODE,
-  COMMENT_NODE,
-} from "ultrahtml";
 import { html, opts } from "virtual:astro-favicons";
 import { defineMiddleware, sequence } from "astro/middleware";
-import { name, version, homepage } from "../config/packge";
 import capo from "./capo";
-
-const banner = `Made by \`${name}\` v${version} - ${homepage}`;
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
+
   const localized = opts.name_localized?.[locale];
-  return localized
-    ? typeof localized === "string"
-      ? localized
-      : localized.value
-    : opts.name;
+  if (!localized) return opts.name;
+
+  return typeof localized === "string" ? localized : localized.value;
 };
 
 export const localizedHTML = (locale?: string) => {
+  const namePattern =
+    /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/;
+
   const tags = html
     .map((line) =>
-      line.replace(
-        /(name="(application-name|apple-mobile-web-app-title)")\scontent="[^"]*"/,
-        `name="$2" content="${useLocaleName(locale)}"`,
-      ),
+      line.replace(namePattern, `name="$2" content="${useLocaleName(locale)}"`),
     )
     .join("\n");
 
-  return `<!--${banner}-->${tags}<!--/Total ${html.length} tag(s)-->`;
+  return tags;
 };
 
-function injectToHead(ast: ElementNode, locale?: string): boolean {
-  let hasInjected = false;
+const withCapo = defineMiddleware(async (ctx, next) => {
+  try {
+    if (html.length === 0) throw "done";
 
-  walkSync(ast, (node) => {
-    if (node.type === ELEMENT_NODE && node.name === "head") {
-      const alreadyInjected = node.children.some(
-        (child) => child.type === COMMENT_NODE && child.value.trim() === banner,
-      );
-      const injectedHTML = localizedHTML(locale);
-      if (!alreadyInjected) {
-        const injectedNodes = parse(injectedHTML).children;
-        node.children.push(...injectedNodes); // 直接插入为子节点
-        hasInjected = true;
-      }
+    const res = await next();
+    if (!res.headers.get("Content-Type").includes("text/html")) {
+      throw "done";
     }
-  });
-  return hasInjected;
-}
 
-export const withCapo = defineMiddleware(async (ctx, next) => {
-  const res = await next();
-  if (!res.headers.get("Content-Type").includes("text/html")) {
+    const doc = await res.text();
+    const headIndex = doc.indexOf("</head>");
+
+    const htmlSet = new Set(html);
+    const isInjected = [...htmlSet].some((line) => doc.includes(line));
+    if (headIndex === -1 || (!opts.withCapo && isInjected)) throw "done";
+
+    const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(ctx.currentLocale) : ""}\n${doc.slice(headIndex)}`;
+
+    return new Response(opts.withCapo ? capo(document) : document, {
+      status: res.status,
+      headers: res.headers,
+    });
+  } catch (e) {
+    if (e !== "done") {
+      console.error("Error in withCapo middleware:", e);
+    }
     return next();
   }
-
-  const doc = await res.text();
-  const ast = parse(doc);
-
-  injectToHead(ast, ctx.currentLocale);
-
-  const document = renderSync(ast);
-
-  return new Response(opts.withCapo ? capo(document) : document, {
-    status: res.status,
-    headers: res.headers,
-  });
 });
 
 export const onRequest = sequence(withCapo);

@@ -35,9 +35,9 @@ async function getIconsForPlatform(
   const offOptions = Object.fromEntries(
     Object.entries(options.icons).map(([key, value]) => [
       key,
-      key === platform ? value : false, // 将其他平台设置为 false
+      key === platform ? value : false,
     ]),
-  );
+  ); // 将其他平台设置为 false
 
   return await favicons(input, {
     ...options,
