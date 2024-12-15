@@ -4,13 +4,13 @@ import capo from "./capo";
 
 const useLocaleName = (locale?: string) => {
   if (!locale) return opts.name;
+
   const localized = opts.name_localized?.[locale];
-  return localized
-    ? typeof localized === "string"
-      ? localized
-      : localized.value
-    : opts.name;
+  if (!localized) return opts.name;
+
+  return typeof localized === "string" ? localized : localized.value;
 };
+
 
 export const localizedHTML = (locale?: string) => {
   const namePattern =
@@ -26,28 +26,36 @@ export const localizedHTML = (locale?: string) => {
 };
 
 const withCapo = defineMiddleware(async (ctx, next) => {
-  if (html.length === 0) return next();
+  try {
+    if (html.length === 0) throw "done";
   
-  const res = await next();
-  if (!res.headers.get("Content-Type").includes("text/html")) {
-    return next();
+    const res = await next();
+    if (!res.headers.get("Content-Type").includes("text/html")) {
+      throw "done";
+    }
+
+    const doc = await res.text();
+    const headIndex = doc.indexOf("</head>");
+
+    const htmlSet = new Set(html);
+    const isInjected = [...htmlSet].some((line) => doc.includes(line));
+    if (headIndex === -1 || (!opts.withCapo && isInjected)) throw "done";
+
+    const locale = ctx.currentLocale;
+    const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}\n${doc.slice(headIndex)}`;
+
+    return new Response(opts.withCapo ? capo(document) : document, {
+      status: res.status,
+      headers: res.headers,
+    });
+
+  } catch (e) {
+    if(e === 'done') {
+      return next()
+    } else {
+      console.error("Error in withCapo middleware:", e);
+    }
   }
-
-  const doc = await res.text();
-
-  const headIndex = doc.indexOf("</head>");
-  if (headIndex === -1) return next();
-  
-  const htmlSet = new Set(html);
-  const isInjected = [...htmlSet].some((line) => doc.includes(line));
-  const locale = ctx.currentLocale;
-
-  const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(locale) : ""}\n${doc.slice(headIndex)}`;
-
-  return new Response(opts.withCapo ? capo(document) : document, {
-    status: res.status,
-    headers: res.headers,
-  });
 });
 
 export const onRequest = sequence(withCapo);
