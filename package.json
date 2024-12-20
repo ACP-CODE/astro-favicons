@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
-    "astro": "4.16.1",
+    "astro": "4.16.18",
     "prettier": "^3.3.3",
     "unbuild": "^2.0.0"
   },
