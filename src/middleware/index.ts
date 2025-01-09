@@ -29,7 +29,7 @@ const withCapo = defineMiddleware(async (ctx, next) => {
     if (html.length === 0) throw "done";
 
     const res = await next();
-    if (!res.headers.get("Content-Type").includes("text/html")) {
+    if (!res.headers.get("Content-Type")?.includes("text/html")) {
       throw "done";
     }
 
