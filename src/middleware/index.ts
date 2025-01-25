@@ -25,32 +25,33 @@ export const localizedHTML = (locale?: string) => {
 };
 
 const withCapo = defineMiddleware(async (ctx, next) => {
+  let originalResponse;
   try {
-    if (html.length === 0) throw "done";
+    if (html.length === 0) return next();
 
-    const res = await next();
-    if (!res.headers.get("Content-Type")?.includes("text/html")) {
-      throw "done";
+    const originalResponse = await next();
+    if (!originalResponse.headers.get("Content-Type")?.includes("text/html")) {
+      return originalResponse;
     }
 
-    const doc = await res.text();
+    const doc = await originalResponse.text();
     const headIndex = doc.indexOf("</head>");
 
     const htmlSet = new Set(html);
     const isInjected = [...htmlSet].some((line) => doc.includes(line));
-    if (headIndex === -1 || (!opts.withCapo && isInjected)) throw "done";
+    if (headIndex === -1 || (!opts.withCapo && isInjected)) return originalResponse;
 
     const document = `${doc.slice(0, headIndex)}\n${!isInjected ? localizedHTML(ctx.currentLocale) : ""}\n${doc.slice(headIndex)}`;
 
     return new Response(opts.withCapo ? capo(document) : document, {
-      status: res.status,
-      headers: res.headers,
+      status: originalResponse.status,
+      headers: originalResponse.headers,
     });
   } catch (e) {
     if (e !== "done") {
       console.error("Error in withCapo middleware:", e);
     }
-    return next();
+    return originalResponse || next();
   }
 });
 
