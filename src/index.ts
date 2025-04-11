@@ -21,6 +21,11 @@ export interface Options extends FaviconOptions {
    * @default config.compressHTML `true`
    */
   withCapo?: boolean;
+  /**
+   * Disable middleware from executing request lifecycle
+   * @default true
+   */
+  addMiddleware?: boolean;
 }
 
 export default function createIntegration(options?: Options): AstroIntegration {
@@ -38,6 +43,8 @@ export default function createIntegration(options?: Options): AstroIntegration {
         addMiddleware,
       }) => {
         opts.withCapo = opts.withCapo ?? config.compressHTML;
+        opts.addMiddleware = opts.addMiddleware ?? true;
+
         if (cmd === "build" || cmd === "dev") {
           if (!isRestart) {
             logger.info(`Processing source...`);
@@ -48,10 +55,13 @@ export default function createIntegration(options?: Options): AstroIntegration {
             },
           });
         }
-        addMiddleware({
-          entrypoint: `${name}/middleware`,
-          order: "pre",
-        });
+
+        if (opts.addMiddleware) {
+          addMiddleware({
+            entrypoint: `${name}/middleware`,
+            order: "pre",
+          });
+        }
       },
     },
   };
