@@ -3,7 +3,7 @@ import type { Plugin, ResolvedConfig } from "vite";
 import type { Options } from ".";
 import { name } from "./config/packge";
 import { fetch } from "./core";
-import { getInput, normalizePath, mime } from "./helpers";
+import { getInput, mime } from "./helpers";
 import { formatTime } from "./utils/timer";
 import { styler as $s } from "./utils/styler";
 
@@ -26,7 +26,6 @@ export async function handleAssets(
   const processedTime = performance.now() - startAt;
 
   const { isRestart, logger } = params;
-  let base = normalizePath(opts.output?.assetsPrefix);
   //
   logger.info(
     `${files.length} file(s), ${images.length} image(s)` +
@@ -62,7 +61,7 @@ export async function handleAssets(
             images.find((img) => img.name === fileName) ||
             files.find((file) => file.name === fileName);
 
-          if (resource && req.url?.startsWith(`/${base}${resource?.name}`)) {
+          if (resource && req.url?.startsWith(`/${resource?.name}`)) {
             const mimeType = mime(fileName);
             res.setHeader("Content-Type", mimeType);
             res.setHeader("Cache-Control", "no-cache");
@@ -87,7 +86,7 @@ export async function handleAssets(
         }) => {
           const fileId = this.emitFile({
             type: "asset",
-            fileName: base + file.name,
+            fileName: file.name,
             source: file.contents,
           });
         };
