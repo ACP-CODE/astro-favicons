@@ -25,15 +25,15 @@ export const localizedHTML = (locale?: string) => {
 };
 
 const withCapo = defineMiddleware(async (ctx, next) => {
+  const res = await next();
   try {
     if (html.length === 0) throw "done";
 
-    const res = await next();
     if (res.headers.get('X-Astro-Route-Type') !== 'page') {
       return res;
     }
 
-    const doc = await res.text();
+    const doc = await res.clone().text();
     const headIndex = doc.indexOf("</head>");
 
     const htmlSet = new Set(html);
@@ -50,7 +50,7 @@ const withCapo = defineMiddleware(async (ctx, next) => {
     if (e !== "done") {
       console.error("Error in withCapo middleware:", e);
     }
-    return next();
+    return res;
   }
 });
 
