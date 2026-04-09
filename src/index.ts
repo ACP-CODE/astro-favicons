@@ -1,4 +1,5 @@
 import type { AstroIntegration } from "astro";
+import { fileURLToPath } from "node:url";
 import type { FaviconOptions, Input } from "./types";
 import { defaults } from "./config/defaults";
 import { handleAssets } from "./plugin";
@@ -25,6 +26,7 @@ export interface Options extends FaviconOptions {
 
 export default function createIntegration(options?: Options): AstroIntegration {
   const opts = { ...defaults, ...options };
+  const middlewareEntry = fileURLToPath(new URL("./middleware.mjs", import.meta.url));
 
   return {
     name,
@@ -45,6 +47,16 @@ export default function createIntegration(options?: Options): AstroIntegration {
           updateConfig({
             vite: {
               plugins: [await handleAssets(opts, { isRestart, logger })],
+              resolve: {
+                // Cloudflare's workerd dev pipeline can prebundle bare package
+                // subpath imports before the virtual module is registered.
+                alias: {
+                  [`${name}/middleware`]: middlewareEntry,
+                },
+              },
+              ssr: {
+                noExternal: [name, `${name}/middleware`],
+              },
             },
           });
         }
