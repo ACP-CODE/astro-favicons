@@ -85,9 +85,12 @@ export async function handleAssets(
           name: string;
           contents: Buffer | string;
         }) => {
+          // Rolldown (used by Vite/Astro 7+) forbids absolute or relative
+          // asset names in `emitFile` — strip the leading "/" if present.
+          const fileName = `${base}${file.name}`.replace(/^\/+/, "");
           const fileId = this.emitFile({
             type: "asset",
-            fileName: base + file.name,
+            fileName,
             source: file.contents,
           });
         };
