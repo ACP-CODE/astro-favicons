@@ -37,7 +37,7 @@ export default function createIntegration(options?: Options): AstroIntegration {
         logger,
         addMiddleware,
       }) => {
-        opts.withCapo = opts.withCapo ?? config.compressHTML;
+        opts.withCapo = opts.withCapo ?? Boolean(config.compressHTML);
         if (cmd === "build" || cmd === "dev") {
           if (!isRestart) {
             logger.info(`Processing source...`);
