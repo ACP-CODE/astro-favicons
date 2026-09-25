@@ -29,7 +29,7 @@ const withCapo = defineMiddleware(async (ctx, next) => {
   try {
     if (html.length === 0) throw "done";
 
-    if (res.headers.get('X-Astro-Route-Type') !== 'page') {
+    if (res.headers.get("Content-Type") !== "text/html") {
       return res;
     }
 
